@@ -2,7 +2,7 @@
 
 <img height="128" alt="Terminux" src="https://raw.githubusercontent.com/wezterm/wezterm/main/assets/icon/wezterm-icon.svg" align="left">
 
-*A GPU-accelerated cross-platform terminal emulator and multiplexer.*
+*A high-performance terminal emulator for modern development environments.*
 
 Terminux is a modern, GPU-accelerated terminal emulator built on top of the excellent [WezTerm](https://github.com/wezterm/wezterm) project by [@wez](https://github.com/wez).
 
