@@ -48,11 +48,16 @@ chmod +x "$APPDIR/AppRun"
 # Step 5: Copy libEGL and libGL if needed (common on older systems)
 echo ">>> Checking for required libraries..."
 mkdir -p "$APPDIR/usr/lib"
+# Search both /usr/lib and /usr/lib64, and arch-specific paths
+LIB_PATHS=("/usr/lib" "/usr/lib64" "/usr/lib/$ARCH-linux-gnu" "/lib/$ARCH-linux-gnu")
 for lib in libEGL.so.1 libGL.so.1 libwayland-client.so.0 libxkbcommon.so.0; do
-    found=$(find /usr/lib -name "$lib" 2>/dev/null | head -1)
-    if [ -n "$found" ]; then
-        cp "$found" "$APPDIR/usr/lib/"
-    fi
+    for lp in "${LIB_PATHS[@]}"; do
+        found=$(find "$lp" -maxdepth 1 -name "$lib" 2>/dev/null | head -1)
+        if [ -n "$found" ]; then
+            cp "$found" "$APPDIR/usr/lib/"
+            break
+        fi
+    done
 done
 
 # Step 6: Copy desktop file to top level for AppImage detection

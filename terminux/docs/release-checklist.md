@@ -70,10 +70,13 @@ Use this checklist before and after publishing a release.
 ## Post-Release
 
 - [ ] GitHub Release created automatically
-- [ ] All artifacts uploaded:
+- [ ] All artifacts uploaded (both architectures):
   - [ ] `terminux-linux-x86_64.tar.gz`
+  - [ ] `terminux-linux-aarch64.tar.gz`
   - [ ] `Terminux-<VERSION>-x86_64.AppImage`
+  - [ ] `Terminux-<VERSION>-aarch64.AppImage`
   - [ ] `terminux_<VERSION>_amd64.deb`
+  - [ ] `terminux_<VERSION>_arm64.deb`
   - [ ] `SHA256SUMS`
 - [ ] Release page looks correct
 - [ ] Download and test AppImage on clean Linux Mint VM

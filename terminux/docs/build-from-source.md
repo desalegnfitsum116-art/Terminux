@@ -95,6 +95,19 @@ cargo build -p terminux-gui -p terminux
 cargo build --release -p terminux
 ```
 
+### Cross-Compile for ARM64 (from x86_64)
+
+```bash
+# Add the ARM64 target
+rustup target add aarch64-unknown-linux-gnu
+
+# Install ARM64 cross-compilation tools
+sudo apt install gcc-aarch64-linux-gnu libc6-dev-arm64-cross
+
+# Build with the ARM64 target
+cargo build --release --target aarch64-unknown-linux-gnu -p terminux-gui -p terminux
+```
+
 ## Run After Build
 
 ```bash

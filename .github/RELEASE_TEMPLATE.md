@@ -35,23 +35,41 @@
 
 #### AppImage (Linux, any distro)
 
+Choose for your architecture:
+
 ```bash
+# x86_64 (Intel/AMD)
 chmod +x Terminux-1.0.0-x86_64.AppImage
 ./Terminux-1.0.0-x86_64.AppImage
+
+# ARM64 (aarch64)
+chmod +x Terminux-1.0.0-aarch64.AppImage
+./Terminux-1.0.0-aarch64.AppImage
 ```
 
 #### Debian / Ubuntu
 
 ```bash
+# x86_64
 sudo dpkg -i terminux_1.0.0_amd64.deb
+
+# ARM64
+sudo dpkg -i terminux_1.0.0_arm64.deb
+
 terminux start
 ```
 
 #### Tarball
 
 ```bash
+# x86_64
 tar xzf terminux-linux-x86_64.tar.gz
 cd terminux-linux-x86_64
+
+# ARM64
+tar xzf terminux-linux-aarch64.tar.gz
+cd terminux-linux-aarch64
+
 ./terminux start
 ```
 

@@ -1,0 +1,14 @@
+[Desktop Entry]
+Name=Terminux
+GenericName=Terminal Emulator
+Comment=GPU Accelerated Terminal Emulator — Fork of WezTerm
+Exec=terminux
+Icon=terminux
+Type=Application
+Terminal=false
+StartupNotify=true
+Categories=System;TerminalEmulator;Development;
+Keywords=shell;prompt;command;commandline;terminal;console;
+StartupWMClass=org.terminux.terminux
+TryExec=terminux
+MimeType=text/plain;

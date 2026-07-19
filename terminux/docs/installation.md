@@ -9,24 +9,29 @@
 
 ## Option 1: AppImage (Recommended)
 
-The AppImage is portable and works on any Linux distribution.
+The AppImage is portable and works on any Linux distribution. Choose the file for your architecture.
+
+### x86_64 (Intel/AMD)
 
 ```bash
-# Download the AppImage
 wget https://github.com/desalegnfitsum116-art/Terminux/releases/download/v1.0.0/Terminux-1.0.0-x86_64.AppImage
-
-# Make executable
 chmod +x Terminux-1.0.0-x86_64.AppImage
-
-# Run
 ./Terminux-1.0.0-x86_64.AppImage
+```
+
+### ARM64 (aarch64, e.g. Raspberry Pi, Apple Silicon VMs)
+
+```bash
+wget https://github.com/desalegnfitsum116-art/Terminux/releases/download/v1.0.0/Terminux-1.0.0-aarch64.AppImage
+chmod +x Terminux-1.0.0-aarch64.AppImage
+./Terminux-1.0.0-aarch64.AppImage
 ```
 
 To integrate into your desktop:
 
 ```bash
 # Extract
-./Terminux-1.0.0-x86_64.AppImage --appimage-extract
+./Terminux-1.0.0-*.AppImage --appimage-extract
 
 # Install system-wide with the install script
 sudo ./scripts/install.sh /usr/local
@@ -34,15 +39,21 @@ sudo ./scripts/install.sh /usr/local
 
 ## Option 2: Debian / Ubuntu (.deb)
 
+### x86_64
+
 ```bash
-# Download
 wget https://github.com/desalegnfitsum116-art/Terminux/releases/download/v1.0.0/terminux_1.0.0_amd64.deb
-
-# Install
 sudo dpkg -i terminux_1.0.0_amd64.deb
-sudo apt-get install -f  # Install any missing dependencies
+sudo apt-get install -f
+terminux start
+```
 
-# Launch
+### ARM64
+
+```bash
+wget https://github.com/desalegnfitsum116-art/Terminux/releases/download/v1.0.0/terminux_1.0.0_arm64.deb
+sudo dpkg -i terminux_1.0.0_arm64.deb
+sudo apt-get install -f
 terminux start
 ```
 
@@ -54,13 +65,21 @@ sudo dpkg -r terminux
 
 ## Option 3: Tarball
 
+### x86_64
+
 ```bash
-# Download and extract
 wget https://github.com/desalegnfitsum116-art/Terminux/releases/download/v1.0.0/terminux-linux-x86_64.tar.gz
 tar xzf terminux-linux-x86_64.tar.gz
 cd terminux-linux-x86_64
+./terminux start
+```
 
-# Run directly
+### ARM64
+
+```bash
+wget https://github.com/desalegnfitsum116-art/Terminux/releases/download/v1.0.0/terminux-linux-aarch64.tar.gz
+tar xzf terminux-linux-aarch64.tar.gz
+cd terminux-linux-aarch64
 ./terminux start
 ```
 

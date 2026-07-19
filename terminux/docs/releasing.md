@@ -86,9 +86,12 @@ sha256sum *.tar.gz *.AppImage *.deb > SHA256SUMS
 
 | Artifact | Description |
 |----------|-------------|
-| `terminux-linux-x86_64.tar.gz` | Portable tarball (binary + docs + icons) |
-| `Terminux-1.0.1-x86_64.AppImage` | AppImage (runs anywhere on Linux) |
-| `terminux_1.0.1_amd64.deb` | Debian/Ubuntu package |
+| `terminux-linux-x86_64.tar.gz` | Portable tarball — x86_64 (binary + docs + icons) |
+| `terminux-linux-aarch64.tar.gz` | Portable tarball — ARM64 |
+| `Terminux-1.0.1-x86_64.AppImage` | AppImage — x86_64 |
+| `Terminux-1.0.1-aarch64.AppImage` | AppImage — ARM64 |
+| `terminux_1.0.1_amd64.deb` | Debian/Ubuntu package — x86_64 |
+| `terminux_1.0.1_arm64.deb` | Debian/Ubuntu package — ARM64 |
 | `SHA256SUMS` | Checksums for verification |
 
 ## Post-Release
