@@ -19,9 +19,9 @@ use std::sync::Arc;
 use std::time::Duration;
 use termwiz::hyperlink::Hyperlink;
 use termwiz::surface::Line;
-use wezterm_dynamic::ToDynamic;
-use wezterm_term::input::{MouseButton, MouseEventKind as TMEK};
-use wezterm_term::{ClickPosition, LastMouseClick, StableRowIndex};
+use terminux_dynamic::ToDynamic;
+use terminux_term::input::{MouseButton, MouseEventKind as TMEK};
+use terminux_term::{ClickPosition, LastMouseClick, StableRowIndex};
 
 impl super::TermWindow {
     fn resolve_ui_item(&self, event: &MouseEvent) -> Option<UIItem> {
@@ -988,7 +988,7 @@ impl super::TermWindow {
             }
         }
 
-        let mouse_event = wezterm_term::MouseEvent {
+        let mouse_event = terminux_term::MouseEvent {
             kind: match event.kind {
                 WMEK::Move => TMEK::Move,
                 WMEK::VertWheel(_) | WMEK::HorzWheel(_) | WMEK::Press(_) => TMEK::Press,

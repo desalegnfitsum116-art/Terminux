@@ -2,8 +2,8 @@ use crate::cli::CliOutputFormatKind;
 use clap::Parser;
 use serde::Serializer as _;
 use tabout::{tabulate_output, Alignment, Column};
-use wezterm_client::client::Client;
-use wezterm_term::TerminalSize;
+use terminux_client::client::Client;
+use terminux_term::TerminalSize;
 
 #[derive(Debug, Parser, Clone, Copy)]
 pub struct ListCommand {

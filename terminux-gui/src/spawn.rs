@@ -8,7 +8,7 @@ use mux::window::WindowId as MuxWindowId;
 use mux::Mux;
 use portable_pty::CommandBuilder;
 use std::sync::Arc;
-use wezterm_term::TerminalSize;
+use terminux_term::TerminalSize;
 
 #[derive(Copy, Debug, Clone, Eq, PartialEq)]
 pub enum SpawnWhere {

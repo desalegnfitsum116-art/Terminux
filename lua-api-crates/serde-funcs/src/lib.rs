@@ -3,7 +3,7 @@ use config::lua::{get_or_create_module, get_or_create_sub_module};
 use luahelper::lua_value_to_dynamic;
 use serde_json::{Map, Value as JValue};
 use std::collections::HashSet;
-use wezterm_dynamic::{FromDynamic, Value as DynValue};
+use terminux_dynamic::{FromDynamic, Value as DynValue};
 
 pub fn register(lua: &Lua) -> anyhow::Result<()> {
     let serde_mod = get_or_create_sub_module(lua, "serde")?;
@@ -30,9 +30,9 @@ pub fn register(lua: &Lua) -> anyhow::Result<()> {
     // See https://github.com/dtolnay/serde-yaml/issues/226
 
     // For backward compatibility.
-    let wezterm_mod = get_or_create_module(lua, "wezterm")?;
-    wezterm_mod.set("json_parse", lua.create_function(json_decode)?)?;
-    wezterm_mod.set("json_encode", lua.create_function(json_encode)?)?;
+    let terminux_mod = get_or_create_module(lua, "wezterm")?;
+    terminux_mod.set("json_parse", lua.create_function(json_decode)?)?;
+    terminux_mod.set("json_encode", lua.create_function(json_encode)?)?;
 
     Ok(())
 }
@@ -182,7 +182,7 @@ fn lua_value_to_json_value(value: LuaValue, visited: &mut HashSet<usize>) -> mlu
                         Err(err) => {
                             return Err(mlua::Error::FromLuaConversionError {
                                 from: "userdata",
-                                to: "wezterm_dynamic::Value",
+                                to: "terminux_dynamic::Value",
                                 message: Some(format!(
                                     "error calling __wezterm_to_dynamic: {err:#}"
                                 )),
@@ -192,7 +192,7 @@ fn lua_value_to_json_value(value: LuaValue, visited: &mut HashSet<usize>) -> mlu
                 } else {
                     return Err(mlua::Error::FromLuaConversionError {
                         from: "userdata",
-                        to: "wezterm_dynamic::Value",
+                        to: "terminux_dynamic::Value",
                         message: Some(format!("no __wezterm_to_dynamic metadata")),
                     });
                 }
@@ -200,7 +200,7 @@ fn lua_value_to_json_value(value: LuaValue, visited: &mut HashSet<usize>) -> mlu
             Err(err) => {
                 return Err(mlua::Error::FromLuaConversionError {
                     from: "userdata",
-                    to: "wezterm_dynamic::Value",
+                    to: "terminux_dynamic::Value",
                     message: Some(format!("error getting metatable: {err:#}")),
                 })
             }

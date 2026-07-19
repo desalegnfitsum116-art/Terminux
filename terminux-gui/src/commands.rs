@@ -384,7 +384,7 @@ impl CommandDef {
 
         let mut candidates_for_removal = vec![];
         #[allow(unexpected_cfgs)] // <https://github.com/SSheldon/rust-objc/issues/125>
-        let wezterm_perform_key_assignment_sel = sel!(weztermPerformKeyAssignment:);
+        let terminux_perform_key_assignment_sel = sel!(weztermPerformKeyAssignment:);
 
         /// Mark menu items as candidates for removal
         fn mark_candidates(menu: &Menu, candidates: &mut Vec<MenuItem>, action: SEL) {
@@ -404,7 +404,7 @@ impl CommandDef {
                 mark_candidates(
                     &existing,
                     &mut candidates_for_removal,
-                    wezterm_perform_key_assignment_sel,
+                    terminux_perform_key_assignment_sel,
                 );
 
                 existing
@@ -420,7 +420,7 @@ impl CommandDef {
         commands.retain(|cmd| !cmd.menubar.is_empty());
 
         // Prefer to put the menus in this order
-        let mut order: Vec<&'static str> = vec!["WezTerm", "Shell", "Edit", "View", "Window"];
+        let mut order: Vec<&'static str> = vec!["Terminux", "Shell", "Edit", "View", "Window"];
         // Add any other menus on the end
         for cmd in &commands {
             if !order.contains(&cmd.menubar[0]) {
@@ -440,18 +440,18 @@ impl CommandDef {
                         // macOS will insert stuff at the top and bottom, so we add
                         // a separator to tidy things up a bit
                         menu.add_item(&MenuItem::new_separator());
-                    } else if cmd.menubar[0] == "WezTerm" {
+                    } else if cmd.menubar[0] == "Terminux" {
                         menu.assign_as_app_menu();
 
                         let about_item = MenuItem::new_with(
-                            &format!("WezTerm {}", config::wezterm_version()),
-                            Some(wezterm_perform_key_assignment_sel),
+                            &format!("Terminux {}", config::terminux_version()),
+                            Some(terminux_perform_key_assignment_sel),
                             "",
                         );
                         about_item.set_tool_tip("Click to copy version number");
                         about_item.set_represented_item(RepresentedItem::KeyAssignment(
                             KeyAssignment::CopyTextTo {
-                                text: config::wezterm_version().to_string(),
+                                text: config::terminux_version().to_string(),
                                 destination: ClipboardCopyDestination::ClipboardAndPrimarySelection,
                             },
                         ));
@@ -527,7 +527,7 @@ impl CommandDef {
                     None => {
                         let item = MenuItem::new_with(
                             &cmd.brief,
-                            Some(wezterm_perform_key_assignment_sel),
+                            Some(terminux_perform_key_assignment_sel),
                             &short_cut,
                         );
                         submenu.add_item(&item);
@@ -745,7 +745,7 @@ pub fn derive_command_from_key_assignment(action: &KeyAssignment) -> Option<Comm
                 .into(),
             keys: vec![(Modifiers::SUPER, "h".into())],
             args: &[],
-            menubar: &["WezTerm"],
+            menubar: &["Terminux"],
             icon: None,
         },
         SpawnWindow => CommandDef {
@@ -1268,15 +1268,15 @@ pub fn derive_command_from_key_assignment(action: &KeyAssignment) -> Option<Comm
             doc: "Reloads the configuration file".into(),
             keys: vec![(Modifiers::SUPER, "r".into())],
             args: &[],
-            menubar: &["WezTerm"],
+            menubar: &["Terminux"],
             icon: Some("md_reload"),
         },
         QuitApplication => CommandDef {
-            brief: "Quit WezTerm".into(),
-            doc: "Quits WezTerm".into(),
+            brief: "Quit Terminux".into(),
+            doc: "Quits Terminux".into(),
             keys: vec![(Modifiers::SUPER, "q".into())],
             args: &[],
-            menubar: &["WezTerm"],
+            menubar: &["Terminux"],
             icon: Some("oct_stop"),
         },
         MoveTabRelative(-1) => CommandDef {
@@ -2011,6 +2011,14 @@ pub fn derive_command_from_key_assignment(action: &KeyAssignment) -> Option<Comm
             menubar: &["Edit"],
             icon: None,
         },
+        ShowDashboard => CommandDef {
+            brief: "Show Terminux Dashboard".into(),
+            doc: "Opens the Terminux startup dashboard with quick actions and system info".into(),
+            keys: vec![(Modifiers::CTRL.union(Modifiers::SHIFT), "d".into())],
+            args: &[ArgType::ActiveWindow],
+            menubar: &["Terminux"],
+            icon: None,
+        },
     })
 }
 
@@ -2019,7 +2027,7 @@ pub fn derive_command_from_key_assignment(action: &KeyAssignment) -> Option<Comm
 fn compute_default_actions() -> Vec<KeyAssignment> {
     // These are ordered by their position within the various menus
     return vec![
-        // ----------------- WezTerm
+        // ----------------- Terminux
         ReloadConfiguration,
         #[cfg(target_os = "macos")]
         HideApplication,
@@ -2135,6 +2143,7 @@ fn compute_default_actions() -> Vec<KeyAssignment> {
         TogglePaneZoomState,
         ActivateLastTab,
         ShowLauncher,
+        ShowDashboard,
         ShowTabNavigator,
         // ----------------- Help
         OpenUri("https://wezterm.org/".to_string()),

@@ -1,9 +1,9 @@
-pub fn wezterm_version() -> &'static str {
+pub fn terminux_version() -> &'static str {
     // See build.rs
-    env!("WEZTERM_CI_TAG")
+    env!("TERMINUX_CI_TAG")
 }
 
-pub fn wezterm_target_triple() -> &'static str {
+pub fn terminux_target_triple() -> &'static str {
     // See build.rs
-    env!("WEZTERM_TARGET_TRIPLE")
+    env!("TERMINUX_TARGET_TRIPLE")
 }

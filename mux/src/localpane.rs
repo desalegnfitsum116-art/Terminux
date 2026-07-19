@@ -28,9 +28,9 @@ use termwiz::escape::{Action, DeviceControlMode};
 use termwiz::input::KeyboardEncoding;
 use termwiz::surface::{Line, SequenceNo};
 use url::Url;
-use wezterm_dynamic::Value;
-use wezterm_term::color::ColorPalette;
-use wezterm_term::{
+use terminux_dynamic::Value;
+use terminux_term::color::ColorPalette;
+use terminux_term::{
     Alert, AlertHandler, Clipboard, DownloadHandler, KeyCode, KeyModifiers, MouseEvent, Progress,
     SemanticZone, StableRowIndex, Terminal, TerminalConfiguration, TerminalSize,
 };
@@ -450,7 +450,7 @@ impl Pane for LocalPane {
         let title = self.terminal.lock().get_title().to_string();
         // If the title is the default pane title, then try to spice
         // things up a bit by returning the process basename instead
-        if title == "wezterm" {
+        if title == "terminux" {
             if let Some(proc_name) = self.get_foreground_process_name(CachePolicy::AllowStale) {
                 let proc_name = std::path::Path::new(&proc_name);
                 if let Some(name) = proc_name.file_name() {
@@ -855,7 +855,7 @@ pub(crate) fn emit_output_for_pane(pane_id: PaneId, message: &str) {
     .detach();
 }
 
-impl wezterm_term::DeviceControlHandler for LocalPaneDCSHandler {
+impl terminux_term::DeviceControlHandler for LocalPaneDCSHandler {
     fn handle_device_control(&mut self, control: termwiz::escape::DeviceControlMode) {
         match control {
             DeviceControlMode::Enter(mode) => {

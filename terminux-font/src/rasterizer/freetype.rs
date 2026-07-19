@@ -22,7 +22,7 @@ use std::cell::RefCell;
 use std::f64::consts::PI;
 use std::mem;
 use std::mem::MaybeUninit;
-use wezterm_color_types::{linear_u8_to_srgb8, SrgbaPixel};
+use terminux_color_types::{linear_u8_to_srgb8, SrgbaPixel};
 
 pub struct FreeTypeRasterizer {
     has_color: bool,

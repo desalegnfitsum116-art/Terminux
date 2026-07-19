@@ -6,7 +6,7 @@ use std::cmp::Ordering;
 use std::ops::Range;
 use termwiz::surface::line::DoubleClickRange;
 use termwiz::surface::SequenceNo;
-use wezterm_term::{SemanticZone, StableRowIndex};
+use terminux_term::{SemanticZone, StableRowIndex};
 
 #[derive(Debug, Default, Copy, Clone, Eq, PartialEq)]
 pub struct Selection {

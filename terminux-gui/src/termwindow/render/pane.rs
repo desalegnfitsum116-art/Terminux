@@ -15,9 +15,9 @@ use mux::renderable::{RenderableDimensions, StableCursorPosition};
 use mux::tab::PositionedPane;
 use ordered_float::NotNan;
 use std::time::Instant;
-use wezterm_dynamic::Value;
-use wezterm_term::color::{ColorAttribute, ColorPalette};
-use wezterm_term::{Line, StableRowIndex};
+use terminux_dynamic::Value;
+use terminux_term::color::{ColorAttribute, ColorPalette};
+use terminux_term::{Line, StableRowIndex};
 use window::color::LinearRgba;
 
 impl crate::TermWindow {

@@ -7,7 +7,7 @@ use config::{DeferredKeyCode, GpuInfo, Key, KeyNoAction};
 use luahelper::dynamic_to_lua_value;
 use mux::window::WindowId as MuxWindowId;
 use std::collections::HashMap;
-use wezterm_dynamic::ToDynamic;
+use terminux_dynamic::ToDynamic;
 
 pub mod guiwin;
 

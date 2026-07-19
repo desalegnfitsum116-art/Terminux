@@ -11,7 +11,7 @@ use config::keyassignment::{KeyAssignment, PaneSelectArguments, PaneSelectMode};
 use config::Dimension;
 use mux::Mux;
 use std::cell::{Ref, RefCell};
-use wezterm_term::{KeyCode, KeyModifiers, MouseEvent};
+use terminux_term::{KeyCode, KeyModifiers, MouseEvent};
 
 pub struct PaneSelector {
     element: RefCell<Option<Vec<ComputedElement>>>,

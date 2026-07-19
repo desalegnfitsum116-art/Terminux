@@ -9,7 +9,7 @@ use core::ops::Range;
 use fancy_regex::{Captures, Regex};
 #[cfg(feature = "use_serde")]
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
-use wezterm_dynamic::{FromDynamic, FromDynamicOptions, ToDynamic, Value};
+use terminux_dynamic::{FromDynamic, FromDynamicOptions, ToDynamic, Value};
 
 extern crate alloc;
 use crate::alloc::borrow::ToOwned;
@@ -18,7 +18,7 @@ use alloc::format;
 use alloc::string::String;
 use alloc::vec::Vec;
 
-pub use wezterm_escape_parser::hyperlink::Hyperlink;
+pub use terminux_escape_parser::hyperlink::Hyperlink;
 
 /// In addition to handling explicit escape sequences to enable
 /// hyperlinks, we also support defining rules that match text
@@ -67,7 +67,7 @@ impl FromDynamic for RegexWrap {
     fn from_dynamic(
         value: &Value,
         options: FromDynamicOptions,
-    ) -> Result<RegexWrap, wezterm_dynamic::Error> {
+    ) -> Result<RegexWrap, terminux_dynamic::Error> {
         let s = String::from_dynamic(value, options)?;
         Ok(RegexWrap(Regex::new(&s).map_err(|e| e.to_string())?))
     }

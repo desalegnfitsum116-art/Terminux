@@ -1,12 +1,12 @@
 [package]
 authors = ["Wez Furlong"]
-name = "wezterm-escape-parser"
+name = "terminux-escape-parser"
 version = "0.1.0"
 edition = "2024"
 repository = "https://github.com/wezterm/wezterm"
 description = "Escape Sequence Parser"
 license = "MIT"
-documentation = "https://docs.rs/wezterm-escape-parser"
+documentation = "https://docs.rs/terminux-escape-parser"
 keywords = ["terminal", "escape", "parser"]
 
 [dependencies]
@@ -25,10 +25,10 @@ serde = {workspace=true, optional=true}
 sha2 = {workspace=true, optional=true}
 thiserror = {version = "2.0", default-features=false }
 vtparse = {workspace = true, features=["alloc"]}
-wezterm-blob-leases = {workspace=true, optional=true}
-wezterm-color-types.workspace = true
-wezterm-dynamic.workspace = true
-wezterm-input-types = {workspace = true, default-features=false}
+terminux-blob-leases = {workspace=true, optional=true}
+terminux-color-types.workspace = true
+terminux-dynamic.workspace = true
+terminux-input-types = {workspace = true, default-features=false}
 
 [target."cfg(windows)".dependencies.winapi]
 workspace = true
@@ -48,11 +48,11 @@ features = [
 ]
 
 [features]
-std = ["vtparse/std", "thiserror/std", "wezterm-input-types/std", "hex/std", "wezterm-dynamic/std"]
+std = ["vtparse/std", "thiserror/std", "terminux-input-types/std", "hex/std", "terminux-dynamic/std"]
 kitty-shm = ["dep:nix", "dep:winapi"]
-use_serde = ["dep:serde", "wezterm-color-types/use_serde", "wezterm-blob-leases/serde", "bitflags/serde", "wezterm-input-types/serde"]
+use_serde = ["dep:serde", "terminux-color-types/use_serde", "terminux-blob-leases/serde", "bitflags/serde", "terminux-input-types/serde"]
 use_image = ["image", "dep:image"]
-image = ["sha2", "wezterm-blob-leases"]
+image = ["sha2", "terminux-blob-leases"]
 tmux_cc = ["dep:pest", "dep:pest_derive"]
 docs = ["use_serde", "image", "tmux_cc", "kitty-shm"]
 

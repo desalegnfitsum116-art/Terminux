@@ -1,0 +1,9 @@
+{
+    "name": "theme_pack",
+    "display_name": "Theme Pack",
+    "version": "1.0.0",
+    "author": "Terminux Team",
+    "description": "Adds Aurora, Dracula, and Nord themes to Terminux",
+    "entry": "plugin.lua",
+    "min_terminux_version": "1.0.0"
+}

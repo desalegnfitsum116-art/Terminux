@@ -3,7 +3,7 @@ use chrono::{DateTime, Utc};
 use clap::Parser;
 use serde::Serializer as _;
 use tabout::{tabulate_output, Alignment, Column};
-use wezterm_client::client::Client;
+use terminux_client::client::Client;
 
 #[derive(Debug, Parser, Clone, Copy)]
 pub struct ListClientsCommand {

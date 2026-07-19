@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
   <content_rating type="oars-1.0" />
-  <id>org.wezfurlong.wezterm</id>
+  <id>org.terminux.terminux</id>
   <metadata_license>MIT</metadata_license>
   <project_license>MIT</project_license>
-  <name>Wez's Terminal Emulator</name>
+  <name>Terminux</name>
   <summary>A GPU-accelerated cross-platform terminal emulator and multiplexer</summary>
   <description>
     <p>
-      WezTerm is a terminal emulator with support for modern features such as
+      Terminux is a terminal emulator with support for modern features such as
       fonts with ligatures, hyperlinks, multiple windows, tabs and split panes.
     </p>
 
@@ -25,7 +25,7 @@
     </p>
   </description>
 
-  <launchable type="desktop-id">org.wezfurlong.wezterm.desktop</launchable>
+  <launchable type="desktop-id">org.terminux.terminux.desktop</launchable>
 
   <url type="homepage">https://wezterm.org/</url>
   <url type="help">https://wezterm.org/help.html</url>

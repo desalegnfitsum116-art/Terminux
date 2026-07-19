@@ -1,5 +1,5 @@
 use clap::Parser;
-use wezterm_client::client::Client;
+use terminux_client::client::Client;
 
 #[derive(Debug, Parser, Clone)]
 pub struct TlsCredsCommand {

@@ -68,7 +68,7 @@ fn derive_struct(input: &DeriveInput, fields: &FieldsNamed) -> Result<TokenStrea
         .map(|f| f.from_dynamic(&literal))
         .collect::<Vec<_>>();
 
-    let bound = parse_quote!(wezterm_dynamic::FromDynamic);
+    let bound = parse_quote!(terminux_dynamic::FromDynamic);
     let bounded_where_clause = bound::where_clause_with_bound(&input.generics, bound);
 
     let obj = if needs_default {
@@ -95,17 +95,17 @@ fn derive_struct(input: &DeriveInput, fields: &FieldsNamed) -> Result<TokenStrea
             quote!(
                 use core::convert::TryFrom;
                 let target = <#try_from>::from_dynamic(value, options)?;
-                <#ident>::try_from(target).map_err(|e| wezterm_dynamic::Error::Message(format!("{:#}", e)))
+                <#ident>::try_from(target).map_err(|e| terminux_dynamic::Error::Message(format!("{:#}", e)))
             )
         }
         None => {
             quote!(
                 match value {
                     Value::Object(obj) => {
-                        wezterm_dynamic::Error::raise_unknown_fields(options, #literal, &obj, Self::possible_field_names())?;
+                        terminux_dynamic::Error::raise_unknown_fields(options, #literal, &obj, Self::possible_field_names())?;
                         #obj
                     }
-                    other => Err(wezterm_dynamic::Error::NoConversion {
+                    other => Err(terminux_dynamic::Error::NoConversion {
                         source_type: other.variant_name().to_string(),
                         dest_type: #literal
                     }),
@@ -115,9 +115,9 @@ fn derive_struct(input: &DeriveInput, fields: &FieldsNamed) -> Result<TokenStrea
     };
 
     let tokens = quote! {
-        impl #impl_generics wezterm_dynamic::FromDynamic for #ident #ty_generics #bounded_where_clause {
-            fn from_dynamic(value: &wezterm_dynamic::Value, options: wezterm_dynamic::FromDynamicOptions) -> core::result::Result<Self, wezterm_dynamic::Error> {
-                use wezterm_dynamic::{Value, BorrowedKey, ObjectKeyTrait};
+        impl #impl_generics terminux_dynamic::FromDynamic for #ident #ty_generics #bounded_where_clause {
+            fn from_dynamic(value: &terminux_dynamic::Value, options: terminux_dynamic::FromDynamicOptions) -> core::result::Result<Self, terminux_dynamic::Error> {
+                use terminux_dynamic::{Value, BorrowedKey, ObjectKeyTrait};
                 #adjust_options
                 #from_dynamic
             }
@@ -159,7 +159,7 @@ fn derive_enum(input: &DeriveInput, enumeration: &DataEnum) -> Result<TokenStrea
             quote!(
                 use core::convert::TryFrom;
                 let target = <#try_from>::from_dynamic(value, options)?;
-                <#ident>::try_from(target).map_err(|e| wezterm_dynamic::Error::Message(format!("{:#}", e)))
+                <#ident>::try_from(target).map_err(|e| terminux_dynamic::Error::Message(format!("{:#}", e)))
             )
         }
         None => {
@@ -207,7 +207,7 @@ fn derive_enum(input: &DeriveInput, enumeration: &DataEnum) -> Result<TokenStrea
                                             #( #var_fields )*
                                         })
                                     }
-                                    other => return Err(wezterm_dynamic::Error::NoConversion {
+                                    other => return Err(terminux_dynamic::Error::NoConversion {
                                         source_type: other.variant_name().to_string(),
                                         dest_type: "Object",
                                     }),
@@ -233,7 +233,7 @@ fn derive_enum(input: &DeriveInput, enumeration: &DataEnum) -> Result<TokenStrea
                                     quote!(
                                         <#ty>::from_dynamic(
                                             arr.get(#idx)
-                                            .ok_or_else(|| wezterm_dynamic::Error::Message(
+                                            .ok_or_else(|| terminux_dynamic::Error::Message(
                                                 format!("missing idx {} of enum struct {}", #idx, #literal)))?,
                                             options
                                             )?,
@@ -248,7 +248,7 @@ fn derive_enum(input: &DeriveInput, enumeration: &DataEnum) -> Result<TokenStrea
                                                 #( #var_fields )*
                                             ))
                                         }
-                                        other => return Err(wezterm_dynamic::Error::NoConversion {
+                                        other => return Err(terminux_dynamic::Error::NoConversion {
                                             source_type: other.variant_name().to_string(),
                                             dest_type: "Array",
                                         }),
@@ -265,7 +265,7 @@ fn derive_enum(input: &DeriveInput, enumeration: &DataEnum) -> Result<TokenStrea
                         Value::String(s) => {
                             match s.as_str() {
                                 #( #units )*
-                                _ => Err(wezterm_dynamic::Error::InvalidVariantForType {
+                                _ => Err(terminux_dynamic::Error::InvalidVariantForType {
                                     variant_name: s.clone(),
                                     type_name: #literal,
                                     possible: #ident::variants(),
@@ -280,27 +280,27 @@ fn derive_enum(input: &DeriveInput, enumeration: &DataEnum) -> Result<TokenStrea
                                     Value::String(name) => {
                                         match name.as_str() {
                                             #( #variants )*
-                                            _ => Err(wezterm_dynamic::Error::InvalidVariantForType {
+                                            _ => Err(terminux_dynamic::Error::InvalidVariantForType {
                                                 variant_name: name.to_string(),
                                                 type_name: #literal,
                                                 possible: #ident::variants(),
                                             })
                                         }
                                     }
-                                    _ => Err(wezterm_dynamic::Error::InvalidVariantForType {
+                                    _ => Err(terminux_dynamic::Error::InvalidVariantForType {
                                         variant_name: name.variant_name().to_string(),
                                         type_name: #literal,
                                         possible: #ident::variants(),
                                     })
                                 }
                             } else {
-                                Err(wezterm_dynamic::Error::IncorrectNumberOfEnumKeys {
+                                Err(terminux_dynamic::Error::IncorrectNumberOfEnumKeys {
                                     type_name: #literal,
                                     num_keys: place.len(),
                                 })
                             }
                         }
-                        other => Err(wezterm_dynamic::Error::NoConversion {
+                        other => Err(terminux_dynamic::Error::NoConversion {
                             source_type: other.variant_name().to_string(),
                             dest_type: #literal
                         }),
@@ -310,9 +310,9 @@ fn derive_enum(input: &DeriveInput, enumeration: &DataEnum) -> Result<TokenStrea
     };
 
     let tokens = quote! {
-        impl wezterm_dynamic::FromDynamic for #ident {
-            fn from_dynamic(value: &wezterm_dynamic::Value, options: wezterm_dynamic::FromDynamicOptions) -> core::result::Result<Self, wezterm_dynamic::Error> {
-                use wezterm_dynamic::{Value, BorrowedKey, ObjectKeyTrait};
+        impl terminux_dynamic::FromDynamic for #ident {
+            fn from_dynamic(value: &terminux_dynamic::Value, options: terminux_dynamic::FromDynamicOptions) -> core::result::Result<Self, terminux_dynamic::Error> {
+                use terminux_dynamic::{Value, BorrowedKey, ObjectKeyTrait};
                 #from_dynamic
             }
         }

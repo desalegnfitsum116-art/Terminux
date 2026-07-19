@@ -7,7 +7,7 @@ use std::path::{Path, PathBuf};
 use std::process::{Child, Command};
 use std::sync::LazyLock;
 use std::time::Duration;
-use wezterm_ssh::{Config, Session, SessionEvent};
+use terminux_ssh::{Config, Session, SessionEvent};
 
 #[cfg(unix)]
 use std::os::unix::fs::PermissionsExt;
@@ -446,11 +446,11 @@ pub async fn session(#[default(Config::new())] config: Config, sshd: Sshd) -> Se
     // generated identity file, and host file
     let mut config = config.for_host("localhost");
     config.insert("port".to_string(), port.to_string());
-    config.insert("wezterm_ssh_verbose".to_string(), "true".to_string());
+    config.insert("terminux_ssh_verbose".to_string(), "true".to_string());
 
     // If libssh-rs is not loaded (but ssh2 is), then we use ssh2 as the backend
     #[cfg(not(feature = "libssh-rs"))]
-    config.insert("wezterm_ssh_backend".to_string(), "ssh2".to_string());
+    config.insert("terminux_ssh_backend".to_string(), "ssh2".to_string());
 
     config.insert(
         "identityagent".to_string(),

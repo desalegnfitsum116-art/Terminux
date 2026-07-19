@@ -4,10 +4,10 @@ use alloc::sync::Arc;
 use finl_unicode::grapheme_clusters::Graphemes;
 #[cfg(feature = "use_serde")]
 use serde::{Deserialize, Serialize};
-use wezterm_cell::color::ColorAttribute;
+use terminux_cell::color::ColorAttribute;
 #[cfg(feature = "use_image")]
-pub use wezterm_cell::image::{ImageData, TextureCoordinate};
-use wezterm_cell::{unicode_column_width, AttributeChange, CellAttributes};
+pub use terminux_cell::image::{ImageData, TextureCoordinate};
+use terminux_cell::{unicode_column_width, AttributeChange, CellAttributes};
 
 extern crate alloc;
 use alloc::string::String;

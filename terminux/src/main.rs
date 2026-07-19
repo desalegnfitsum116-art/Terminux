@@ -2,7 +2,7 @@ use anyhow::{anyhow, Context};
 use clap::builder::ValueParser;
 use clap::{Parser, ValueEnum, ValueHint};
 use clap_complete::{generate as generate_completion, shells, Generator as CompletionGenerator};
-use config::{wezterm_version, ConfigHandle};
+use config::{terminux_version, ConfigHandle};
 use mux::Mux;
 use std::ffi::OsString;
 use std::io::Read;
@@ -14,17 +14,28 @@ use termwiz::surface::change::Change;
 use termwiz::surface::Position;
 use termwiz::terminal::{ScreenSize, Terminal};
 use umask::UmaskSaver;
-use wezterm_gui_subcommands::*;
+use terminux_gui_subcommands::*;
 
 mod asciicast;
 mod cli;
 
 //    let message = "; ❤ 😍🤢\n\x1b[91;mw00t\n\x1b[37;104;m bleet\x1b[0;m.";
 
+use std::sync::OnceLock;
+
+static FULL_VERSION: OnceLock<String> = OnceLock::new();
+
+fn terminux_full_version() -> &'static str {
+    FULL_VERSION.get_or_init(|| {
+        format!("{}\nBased on WezTerm\nRenderer: GPU", terminux_version())
+    })
+}
+
 #[derive(Debug, Parser)]
 #[command(
-    about = "Wez's Terminal Emulator\nhttp://github.com/wezterm/wezterm",
-    version = wezterm_version()
+    name = "Terminux",
+    about = "Terminux - GPU Accelerated Terminal Emulator\nhttp://github.com/wezterm/wezterm",
+    version = terminux_full_version()
 )]
 pub struct Opt {
     /// Skip loading wezterm.lua
@@ -107,7 +118,7 @@ enum SubCommand {
     #[command(name = "serial", about = "Open a serial port")]
     Serial(SerialCommand),
 
-    #[command(name = "connect", about = "Connect to wezterm multiplexer")]
+    #[command(name = "connect", about = "Connect to terminux multiplexer")]
     Connect(ConnectCommand),
 
     #[command(name = "ls-fonts", about = "Display information about fonts")]
@@ -134,6 +145,22 @@ enum SubCommand {
 
     #[command(name = "replay", about = "Replay an asciicast terminal session")]
     Replay(asciicast::PlayCommand),
+
+    /// Manage Terminux themes
+    #[command(name = "theme", about = "List, set, or show Terminux themes")]
+    Theme(cli::theme::ThemeCommand),
+
+    /// Manage Terminux plugins
+    #[command(name = "plugin", about = "List, enable, or disable Terminux plugins")]
+    Plugin(cli::plugin::PluginCommand),
+
+    /// Manage Terminux sessions
+    #[command(name = "session", about = "Save, restore, export, or import sessions")]
+    Session(cli::session::SessionCommand),
+
+    /// Reload the Terminux configuration
+    #[command(name = "reload", about = "Reload the configuration file")]
+    Reload,
 
     /// Generate shell completion information
     #[command(name = "shell-completion")]
@@ -746,10 +773,22 @@ fn run() -> anyhow::Result<()> {
         SubCommand::Start(_)
         | SubCommand::BlockingStart(_)
         | SubCommand::LsFonts(_)
-        | SubCommand::ShowKeys(_)
+        |         SubCommand::ShowKeys(_)
         | SubCommand::Ssh(_)
         | SubCommand::Serial(_)
         | SubCommand::Connect(_) => delegate_to_gui(saver),
+        SubCommand::Theme(cmd) => cmd.run(),
+        SubCommand::Plugin(cmd) => cmd.run(),
+        SubCommand::Session(cmd) => cmd.run(),
+        SubCommand::Reload => {
+            config::common_init(
+                opts.config_file.as_ref(),
+                &opts.config_override,
+                opts.skip_config,
+            ).context("config::common_init")?;
+            println!("Configuration reloaded successfully.");
+            Ok(())
+        }
         SubCommand::ImageCat(cmd) => cmd.run(),
         SubCommand::SetCwd(cmd) => cmd.run(),
         SubCommand::Cli(cli) => cli::run_cli(&opts, cli),
@@ -772,9 +811,9 @@ fn delegate_to_gui(saver: UmaskSaver) -> anyhow::Result<()> {
     drop(saver);
 
     let exe_name = if cfg!(windows) {
-        "wezterm-gui.exe"
+        "terminux-gui.exe"
     } else {
-        "wezterm-gui"
+        "terminux-gui"
     };
 
     let exe = std::env::current_exe()?

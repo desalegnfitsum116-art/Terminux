@@ -4,10 +4,10 @@ use humansize::{SizeFormatter, DECIMAL};
 use num_traits::{One, Zero};
 use ordered_float::NotNan;
 use std::sync::Arc;
-use wezterm_cell::image::{ImageCell, ImageDataType};
-use wezterm_cell::Cell;
-use wezterm_surface::change::ImageData;
-use wezterm_surface::TextureCoordinate;
+use terminux_cell::image::{ImageCell, ImageDataType};
+use terminux_cell::Cell;
+use terminux_surface::change::ImageData;
+use terminux_surface::TextureCoordinate;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct PlacementInfo {

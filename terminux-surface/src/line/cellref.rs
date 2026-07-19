@@ -1,6 +1,6 @@
 use core::hash::{Hash, Hasher};
-use wezterm_cell::{Cell, CellAttributes};
-use wezterm_char_props::emoji::Presentation;
+use terminux_cell::{Cell, CellAttributes};
+use terminux_char_props::emoji::Presentation;
 
 #[derive(Debug, Clone, Copy)]
 pub enum CellRef<'a> {

@@ -1,8 +1,8 @@
 use crate::color::ColorPalette;
 use downcast_rs::{impl_downcast, Downcast};
-use wezterm_bidi::ParagraphDirectionHint;
-use wezterm_cell::UnicodeVersion;
-use wezterm_surface::{Line, SequenceNo};
+use terminux_bidi::ParagraphDirectionHint;
+use terminux_cell::UnicodeVersion;
+use terminux_surface::{Line, SequenceNo};
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum NewlineCanon {

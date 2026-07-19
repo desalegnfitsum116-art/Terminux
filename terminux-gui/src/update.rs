@@ -1,6 +1,6 @@
 use crate::ICON_DATA;
 use anyhow::anyhow;
-use config::{configuration, wezterm_version};
+use config::{configuration, terminux_version};
 use http_req::request::{HttpVersion, Request};
 use http_req::uri::Uri;
 use mux::connui::ConnectionUI;
@@ -14,7 +14,7 @@ use termwiz::color::AnsiColor;
 use termwiz::escape::csi::{Cursor, Sgr};
 use termwiz::escape::osc::{ITermDimension, ITermFileData, ITermProprietary};
 use termwiz::escape::{OneBased, OperatingSystemCommand, CSI};
-use wezterm_toast_notification::*;
+use terminux_toast_notification::*;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Release {
@@ -41,7 +41,7 @@ fn get_github_release_info(uri: &str) -> anyhow::Result<Release> {
         .version(HttpVersion::Http10)
         .header(
             "User-Agent",
-            &format!("wezterm/wezterm-{}", wezterm_version()),
+            &format!("wezterm/wezterm-{}", terminux_version()),
         )
         .send(&mut latest)
         .map_err(|e| anyhow!("failed to query github releases: {}", e))?;
@@ -80,8 +80,8 @@ pub fn load_last_release_info_and_set_banner() {
             Err(_) => return,
         };
 
-        let current = wezterm_version();
-        let force_ui = std::env::var_os("WEZTERM_ALWAYS_SHOW_UPDATE_UI").is_some();
+        let current = terminux_version();
+        let force_ui = std::env::var_os("TERMINUX_ALWAYS_SHOW_UPDATE_UI").is_some();
         if latest.tag_name.as_str() <= current && !force_ui {
             return;
         }
@@ -119,7 +119,7 @@ fn set_banner_from_release_info(latest: &Release) {
     let reset = CSI::Sgr(Sgr::Reset);
     let link_off = OperatingSystemCommand::SetHyperlink(None);
     mux.set_banner(Some(format!(
-        "{}{}WezTerm Update Available\r\n{}{}{}{}Click to see what's new{}{}\r\n",
+        "{}{}Terminux Update Available\r\n{}{}{}{}Click to see what's new{}{}\r\n",
         icon,
         top_line_pos,
         second_line_pos,
@@ -132,7 +132,7 @@ fn set_banner_from_release_info(latest: &Release) {
 }
 
 fn schedule_set_banner_from_release_info(latest: &Release) {
-    let current = wezterm_version();
+    let current = terminux_version();
     if latest.tag_name.as_str() <= current {
         return;
     }
@@ -154,7 +154,7 @@ fn update_checker() {
     let update_interval = Duration::from_secs(configuration().check_for_updates_interval_seconds);
     let initial_interval = Duration::from_secs(10);
 
-    let force_ui = std::env::var_os("WEZTERM_ALWAYS_SHOW_UPDATE_UI").is_some();
+    let force_ui = std::env::var_os("TERMINUX_ALWAYS_SHOW_UPDATE_UI").is_some();
 
     let update_file_name = config::DATA_DIR.join("check_update");
     let delay = update_file_name
@@ -178,12 +178,12 @@ fn update_checker() {
         // window: the one of us that sorts first in the list will
         // own doing that, so that if there are a dozen gui processes
         // running, we don't spam the user with a lot of notifications.
-        let socks = wezterm_client::discovery::discover_gui_socks();
+        let socks = terminux_client::discovery::discover_gui_socks();
 
         if configuration().check_for_updates {
             if let Ok(latest) = get_latest_release_info() {
                 schedule_set_banner_from_release_info(&latest);
-                let current = wezterm_version();
+                let current = terminux_version();
                 if latest.tag_name.as_str() > current || force_ui {
                     log::info!(
                         "latest release {} is newer than current build {}",
@@ -195,7 +195,7 @@ fn update_checker() {
 
                     if force_ui || socks.is_empty() || socks[0] == my_sock {
                         persistent_toast_notification_with_click_to_open_url(
-                            "WezTerm Update Available",
+                            "Terminux Update Available",
                             "Click to see what's new",
                             &url,
                         );

@@ -4,8 +4,8 @@
 
 #[cfg(feature = "use_serde")]
 use serde::{Deserialize, Serialize};
-pub use wezterm_color_types::{LinearRgba, SrgbaTuple};
-use wezterm_dynamic::{FromDynamic, ToDynamic};
+pub use terminux_color_types::{LinearRgba, SrgbaTuple};
+use terminux_dynamic::{FromDynamic, ToDynamic};
 
 #[cfg(not(feature = "std"))]
 extern crate alloc;
@@ -16,7 +16,7 @@ use alloc::format;
 #[cfg(not(feature = "std"))]
 use alloc::vec::Vec;
 
-pub use wezterm_escape_parser::color::{AnsiColor, ColorSpec, PaletteIndex, RgbColor};
+pub use terminux_escape_parser::color::{AnsiColor, ColorSpec, PaletteIndex, RgbColor};
 
 /// Specifies the color to be used when rendering a cell.  This is the
 /// type used in the `CellAttributes` struct and can specify an optional

@@ -8,8 +8,8 @@ use crate::termwindow::{UIItem, UIItemType};
 use crate::utilsprites::RenderMetrics;
 use config::{Dimension, DimensionContext, TabBarColors};
 use std::rc::Rc;
-use wezterm_font::LoadedFont;
-use wezterm_term::color::{ColorAttribute, ColorPalette};
+use terminux_font::LoadedFont;
+use terminux_term::color::{ColorAttribute, ColorPalette};
 use window::{IntegratedTitleButtonAlignment, IntegratedTitleButtonStyle};
 
 const X_BUTTON: &[Poly] = &[

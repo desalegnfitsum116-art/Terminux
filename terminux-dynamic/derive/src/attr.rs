@@ -105,7 +105,7 @@ impl<'a> FieldInfo<'a> {
 
         let check_deprecated = if let Some(reason) = &self.deprecated {
             quote!(
-                wezterm_dynamic::Error::raise_deprecated_fields(options, #struct_name, #name, #reason)?;
+                terminux_dynamic::Error::raise_deprecated_fields(options, #struct_name, #name, #reason)?;
             )
         } else {
             quote!()
@@ -113,7 +113,7 @@ impl<'a> FieldInfo<'a> {
         let validate_value = if let Some(validator) = &self.validate {
             quote!(
                 #validator(&value).map_err(|msg| {
-                    wezterm_dynamic::Error::ErrorInField{
+                    terminux_dynamic::Error::ErrorInField{
                         type_name: #struct_name,
                         field_name: #name,
                         error: msg,
@@ -150,7 +150,7 @@ impl<'a> FieldInfo<'a> {
                                         obj,
                                     ))?;
                                 let value = <#ty>::try_from(target)
-                                    .map_err(|source| wezterm_dynamic::Error::ErrorInField{
+                                    .map_err(|source| terminux_dynamic::Error::ErrorInField{
                                         type_name:#struct_name,
                                         field_name:#name,
                                         error: format!("{:#}", source)
@@ -177,7 +177,7 @@ impl<'a> FieldInfo<'a> {
                                         obj,
                                     ))?;
                                 let value = <#ty>::try_from(target)
-                                    .map_err(|source| wezterm_dynamic::Error::ErrorInField{
+                                    .map_err(|source| terminux_dynamic::Error::ErrorInField{
                                         type_name:#struct_name,
                                         field_name:#name,
                                         error: format!("{:#}", source),
@@ -205,7 +205,7 @@ impl<'a> FieldInfo<'a> {
                                         obj,
                                     ))?;
                             let value = <#ty>::try_from(target)
-                                    .map_err(|source| wezterm_dynamic::Error::ErrorInField{
+                                    .map_err(|source| terminux_dynamic::Error::ErrorInField{
                                         type_name:#struct_name,
                                         field_name:#name,
                                         error: format!("{:#}", source),

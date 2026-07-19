@@ -15,9 +15,9 @@ use std::cell::RefCell;
 use std::rc::Rc;
 use termwiz::cell::{grapheme_column_width, Presentation};
 use termwiz::surface::Line;
-use wezterm_font::units::PixelUnit;
-use wezterm_font::LoadedFont;
-use wezterm_term::color::{ColorAttribute, ColorPalette};
+use terminux_font::units::PixelUnit;
+use terminux_font::LoadedFont;
+use terminux_term::color::{ColorAttribute, ColorPalette};
 use window::bitmaps::atlas::Sprite;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -596,7 +596,7 @@ impl super::TermWindow {
         match &element.content {
             ElementContent::Text(s) => {
                 let window = self.window.as_ref().unwrap().clone();
-                let direction = wezterm_bidi::Direction::LeftToRight;
+                let direction = terminux_bidi::Direction::LeftToRight;
                 let infos = element.font.shape(
                     &s,
                     move || window.notify(TermWindowNotif::InvalidateShapeCache),

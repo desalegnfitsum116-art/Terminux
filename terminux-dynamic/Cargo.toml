@@ -1,5 +1,5 @@
 [package]
-name = "wezterm-dynamic"
+name = "terminux-dynamic"
 version = "0.2.1"
 edition = "2021"
 repository = "https://github.com/wezterm/wezterm"
@@ -14,7 +14,7 @@ log.workspace = true
 ordered-float = {workspace = true, features=["libm"]}
 strsim = {workspace = true, optional=true}
 thiserror = {version="2.0", default-features=false}
-wezterm-dynamic-derive.workspace = true
+terminux-dynamic-derive.workspace = true
 
 [dev-dependencies]
 maplit.workspace = true

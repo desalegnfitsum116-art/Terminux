@@ -4,7 +4,7 @@ use assert_fs::TempDir;
 use predicates::prelude::*;
 use rstest::*;
 use std::convert::TryInto;
-use wezterm_ssh::{FileType, SftpChannelError, SftpError, Utf8PathBuf};
+use terminux_ssh::{FileType, SftpChannelError, SftpError, Utf8PathBuf};
 
 // Sftp file tests
 mod file;

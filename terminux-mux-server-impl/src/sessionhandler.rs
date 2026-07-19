@@ -14,8 +14,8 @@ use std::sync::{Arc, Mutex};
 use std::time::Instant;
 use termwiz::surface::SequenceNo;
 use url::Url;
-use wezterm_term::terminal::Alert;
-use wezterm_term::StableRowIndex;
+use terminux_term::terminal::Alert;
+use terminux_term::StableRowIndex;
 
 #[derive(Clone)]
 pub struct PduSender {
@@ -857,9 +857,9 @@ impl SessionHandler {
                     Ok(executable_path) => {
                         send_response(Ok(Pdu::GetCodecVersionResponse(GetCodecVersionResponse {
                             codec_vers: CODEC_VERSION,
-                            version_string: config::wezterm_version().to_owned(),
+                            version_string: config::terminux_version().to_owned(),
                             executable_path,
-                            config_file_path: std::env::var_os("WEZTERM_CONFIG_FILE")
+                            config_file_path: std::env::var_os("TERMINUX_CONFIG_FILE")
                                 .map(Into::into),
                         })))
                     }

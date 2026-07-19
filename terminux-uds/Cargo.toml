@@ -1,11 +1,11 @@
 [package]
-name = "wezterm-uds"
+name = "terminux-uds"
 version = "0.1.0"
 edition = "2021"
 repository = "https://github.com/wezterm/wezterm"
 description = "Portable unix domain sockets"
 license = "MIT"
-documentation = "https://docs.rs/wezterm-uds"
+documentation = "https://docs.rs/terminux-uds"
 
 [dependencies]
 async-io.workspace = true

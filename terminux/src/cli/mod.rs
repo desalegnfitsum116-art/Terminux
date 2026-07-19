@@ -1,7 +1,7 @@
 use anyhow::anyhow;
 use clap::Parser;
 use std::ffi::OsString;
-use wezterm_client::client::Client;
+use terminux_client::client::Client;
 
 mod activate_pane;
 mod activate_pane_direction;
@@ -22,6 +22,10 @@ mod spawn_command;
 mod split_pane;
 mod tls_creds;
 mod zoom_pane;
+
+pub mod plugin;
+pub mod session;
+pub mod theme;
 
 #[derive(Debug, Parser, Clone, Copy)]
 enum CliOutputFormatKind {
@@ -163,6 +167,7 @@ Outputs the pane-id for the newly created pane on success"
     /// Zoom, unzoom, or toggle zoom state
     #[command(name = "zoom-pane", rename_all = "kebab")]
     ZoomPane(zoom_pane::ZoomPane),
+
 }
 
 async fn run_cli_async(opts: &crate::Opt, cli: CliCommand) -> anyhow::Result<()> {
@@ -176,7 +181,7 @@ async fn run_cli_async(opts: &crate::Opt, cli: CliCommand) -> anyhow::Result<()>
         cli.prefer_mux,
         cli.class
             .as_deref()
-            .unwrap_or(wezterm_gui_subcommands::DEFAULT_WINDOW_CLASS),
+            .unwrap_or(terminux_gui_subcommands::DEFAULT_WINDOW_CLASS),
     )?;
 
     match cli.sub {

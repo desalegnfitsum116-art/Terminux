@@ -26,13 +26,13 @@ use std::sync::Arc;
 use termwiz::cell::CellAttributes;
 use termwiz::surface::{Line, SEQ_ZERO};
 use unicode_normalization::UnicodeNormalization;
-use wezterm_bidi::Direction;
-use wezterm_client::domain::ClientDomain;
-use wezterm_font::shaper::PresentationWidth;
-use wezterm_font::FontConfiguration;
-use wezterm_gui_subcommands::*;
-use wezterm_mux_server_impl::update_mux_domains;
-use wezterm_toast_notification::*;
+use terminux_bidi::Direction;
+use terminux_client::domain::ClientDomain;
+use terminux_font::shaper::PresentationWidth;
+use terminux_font::FontConfiguration;
+use terminux_gui_subcommands::*;
+use terminux_mux_server_impl::update_mux_domains;
+use terminux_toast_notification::*;
 
 mod colorease;
 mod commands;
@@ -67,8 +67,8 @@ pub use termwindow::{set_window_class, set_window_position, TermWindow, ICON_DAT
 
 #[derive(Debug, Parser)]
 #[command(
-    about = "Wez's Terminal Emulator\nhttp://github.com/wezterm/wezterm",
-    version = config::wezterm_version()
+    about = "Terminux - GPU Accelerated Terminal Emulator\nhttp://github.com/wezterm/wezterm",
+    version = config::terminux_version()
 )]
 struct Opt {
     /// Skip loading wezterm.lua
@@ -123,7 +123,7 @@ enum SubCommand {
     #[command(name = "serial", about = "Open a serial port")]
     Serial(SerialCommand),
 
-    #[command(name = "connect", about = "Connect to wezterm multiplexer")]
+    #[command(name = "connect", about = "Connect to terminux multiplexer")]
     Connect(ConnectCommand),
 
     #[command(name = "ls-fonts", about = "Display information about fonts")]
@@ -136,7 +136,7 @@ enum SubCommand {
 async fn async_run_ssh(opts: SshCommand) -> anyhow::Result<()> {
     let mut ssh_option = HashMap::new();
     if opts.verbose {
-        ssh_option.insert("wezterm_ssh_verbose".to_string(), "true".to_string());
+        ssh_option.insert("terminux_ssh_verbose".to_string(), "true".to_string());
     }
     for (k, v) in opts.config_override {
         ssh_option.insert(k.to_ascii_lowercase(), v);
@@ -412,9 +412,9 @@ async fn async_run_terminal_gui(
 ) -> anyhow::Result<()> {
     let unix_socket_path =
         config::RUNTIME_DIR.join(format!("gui-sock-{}", unsafe { libc::getpid() }));
-    std::env::set_var("WEZTERM_UNIX_SOCKET", unix_socket_path.clone());
-    wezterm_blob_leases::register_storage(Arc::new(
-        wezterm_blob_leases::simple_tempdir::SimpleTempDir::new_in(&*config::CACHE_DIR)?,
+    std::env::set_var("TERMINUX_UNIX_SOCKET", unix_socket_path.clone());
+    terminux_blob_leases::register_storage(Arc::new(
+        terminux_blob_leases::simple_tempdir::SimpleTempDir::new_in(&*config::CACHE_DIR)?,
     ))?;
     if let Err(err) = spawn_mux_server(unix_socket_path, should_publish) {
         log::warn!("{:#}", err);
@@ -517,7 +517,7 @@ impl Publish {
             return Self::NoConnectNoPublish;
         }
 
-        match wezterm_client::discovery::resolve_gui_sock_path(
+        match terminux_client::discovery::resolve_gui_sock_path(
             &crate::termwindow::get_window_class(),
         ) {
             Ok(path) => Self::TryPathOrPublish(path),
@@ -547,7 +547,7 @@ impl Publish {
                 ..Default::default()
             };
             let mut ui = mux::connui::ConnectionUI::new_headless();
-            match wezterm_client::client::Client::new_unix_domain(None, &dom, false, &mut ui, true)
+            match terminux_client::client::Client::new_unix_domain(None, &dom, false, &mut ui, true)
             {
                 Ok(client) => {
                     let executor = promise::spawn::ScopedExecutor::new();
@@ -561,7 +561,7 @@ impl Publish {
                                 "Running GUI is a different executable from us, will start a new one");
                         }
                         if vers.config_file_path
-                            != std::env::var_os("WEZTERM_CONFIG_FILE").map(Into::into)
+                            != std::env::var_os("TERMINUX_CONFIG_FILE").map(Into::into)
                         {
                             *self = Publish::NoConnectNoPublish;
                             anyhow::bail!(
@@ -650,14 +650,14 @@ impl Publish {
 
 fn spawn_mux_server(unix_socket_path: PathBuf, should_publish: bool) -> anyhow::Result<()> {
     let mut listener =
-        wezterm_mux_server_impl::local::LocalListener::with_domain(&config::UnixDomain {
+        terminux_mux_server_impl::local::LocalListener::with_domain(&config::UnixDomain {
             socket_path: Some(unix_socket_path.clone()),
             ..Default::default()
         })?;
     std::thread::spawn(move || {
         let name_holder;
         if should_publish {
-            name_holder = wezterm_client::discovery::publish_gui_sock_path(
+            name_holder = terminux_client::discovery::publish_gui_sock_path(
                 &unix_socket_path,
                 &crate::termwindow::get_window_class(),
             );
@@ -859,7 +859,7 @@ fn run_show_keys(config: config::ConfigHandle, cmd: &ShowKeysCommand) -> anyhow:
 }
 
 pub fn run_ls_fonts(config: config::ConfigHandle, cmd: &LsFontsCommand) -> anyhow::Result<()> {
-    use wezterm_font::parser::ParsedFont;
+    use terminux_font::parser::ParsedFont;
 
     if let Err(err) = config::configuration_result() {
         log::error!("{}", err);
@@ -870,7 +870,7 @@ pub fn run_ls_fonts(config: config::ConfigHandle, cmd: &LsFontsCommand) -> anyho
     // a fully baked GUI environment running
     config::assign_error_callback(|err| eprintln!("{}", err));
 
-    let font_config = Rc::new(wezterm_font::FontConfiguration::new(
+    let font_config = Rc::new(terminux_font::FontConfiguration::new(
         Some(config.clone()),
         config.dpi.unwrap_or_else(|| ::window::default_dpi()) as usize,
     )?);
@@ -916,7 +916,7 @@ pub fn run_ls_fonts(config: config::ConfigHandle, cmd: &LsFontsCommand) -> anyho
             Some(&unicode_version),
         );
         let cell_clusters = line.cluster(bidi_hint);
-        let ft_lib = wezterm_font::ftwrap::Library::new()?;
+        let ft_lib = terminux_font::ftwrap::Library::new()?;
 
         let mut glyph_cache = GlyphCache::new_in_memory(&font_config, 256)?;
 
@@ -1250,7 +1250,7 @@ fn run() -> anyhow::Result<()> {
         SubCommand::Start(start) => {
             log::trace!("Using configuration: {:#?}\nopts: {:#?}", config, opts);
             let res = run_terminal_gui(start, None);
-            wezterm_blob_leases::clear_storage();
+            terminux_blob_leases::clear_storage();
             res
         }
         SubCommand::BlockingStart(_) => unreachable!(),

@@ -1,8 +1,8 @@
 use num_derive::FromPrimitive;
 #[cfg(feature = "use_serde")]
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
-pub use wezterm_color_types::{LinearRgba, SrgbaTuple};
-use wezterm_dynamic::{FromDynamic, FromDynamicOptions, ToDynamic, Value};
+pub use terminux_color_types::{LinearRgba, SrgbaTuple};
+use terminux_dynamic::{FromDynamic, FromDynamicOptions, ToDynamic, Value};
 
 use crate::allocate::*;
 
@@ -209,7 +209,7 @@ impl FromDynamic for RgbColor {
     fn from_dynamic(
         value: &Value,
         options: FromDynamicOptions,
-    ) -> Result<Self, wezterm_dynamic::Error> {
+    ) -> Result<Self, terminux_dynamic::Error> {
         let s = String::from_dynamic(value, options)?;
         Ok(RgbColor::from_named_or_rgb_string(&s)
             .ok_or_else(|| format!("unknown color name: {}", s))?)

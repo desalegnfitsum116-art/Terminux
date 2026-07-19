@@ -25,10 +25,10 @@ use std::time::{Duration, Instant};
 use termwiz::color::RgbColor;
 use termwiz::image::{ImageData, ImageDataType};
 use termwiz::surface::CursorShape;
-use wezterm_blob_leases::{BlobLease, BlobManager, BoxedReader};
-use wezterm_font::units::*;
-use wezterm_font::{FontConfiguration, GlyphInfo, LoadedFont, LoadedFontId};
-use wezterm_term::Underline;
+use terminux_blob_leases::{BlobLease, BlobManager, BoxedReader};
+use terminux_font::units::*;
+use terminux_font::{FontConfiguration, GlyphInfo, LoadedFont, LoadedFontId};
+use terminux_term::Underline;
 
 static FRAME_ERROR_REPORTED: AtomicBool = AtomicBool::new(false);
 

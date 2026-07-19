@@ -1,14 +1,14 @@
 use clap::Parser;
 use mux::pane::PaneId;
 use termwiz_funcs::lines_to_escapes;
-use wezterm_client::client::Client;
-use wezterm_term::{ScrollbackOrVisibleRowIndex, StableRowIndex};
+use terminux_client::client::Client;
+use terminux_term::{ScrollbackOrVisibleRowIndex, StableRowIndex};
 
 #[derive(Debug, Parser, Clone)]
 pub struct GetText {
     /// Specify the target pane.
     /// The default is to use the current pane based on the
-    /// environment variable WEZTERM_PANE.
+    /// environment variable TERMINUX_PANE.
     #[arg(long)]
     pane_id: Option<PaneId>,
 

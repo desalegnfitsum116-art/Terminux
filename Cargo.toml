@@ -5,17 +5,17 @@ members = [
   "strip-ansi-escapes",
   "sync-color-schemes",
   "deps/cairo",
-  "wezterm",
-  "wezterm-blob-leases",
-  "wezterm-cell",
-  "wezterm-escape-parser",
-  "wezterm-dynamic",
-  "wezterm-gui",
-  "wezterm-mux-server",
-  "wezterm-open-url",
-  "wezterm-ssh",
-  "wezterm-surface",
-  "wezterm-uds",
+  "terminux",
+  "terminux-blob-leases",
+  "terminux-cell",
+  "terminux-escape-parser",
+  "terminux-dynamic",
+  "terminux-gui",
+  "terminux-mux-server",
+  "terminux-open-url",
+  "terminux-ssh",
+  "terminux-surface",
+  "terminux-uds",
 ]
 resolver = "2"
 exclude = [
@@ -25,7 +25,10 @@ exclude = [
 
 [profile.release]
 opt-level = 3
-# debug = 2
+lto = true
+codegen-units = 1
+strip = true
+panic = "abort"
 
 [profile.dev]
 # https://jakedeichert.com/blog/reducing-rust-incremental-compilation-times-on-macos-by-70-percent/
@@ -239,27 +242,27 @@ wayland-client = "0.31"
 wayland-egl = "0.32"
 wayland-protocols = "0.32"
 wayland-protocols-plasma = { version="0.3.6", features=["client"] }
-wezterm-bidi = { version="0.2.3", path = "bidi", default-features=false}
-wezterm-blob-leases = { version="0.1.1", path = "wezterm-blob-leases"}
-wezterm-cell = { path = "wezterm-cell"}
-wezterm-char-props = { path = "wezterm-char-props", default-features=false }
-wezterm-client = { path = "wezterm-client" }
-wezterm-color-types = { version="0.3", path = "color-types", default-features=false }
-wezterm-config-derive = { version="0.1", path="config/derive" }
-wezterm-dynamic = { version = "0.2.1", path = "wezterm-dynamic", default-features=false }
-wezterm-dynamic-derive = { version="0.1.1", path="wezterm-dynamic/derive" }
-wezterm-escape-parser = { version="0.1.0", path="wezterm-escape-parser" }
-wezterm-font = { path = "wezterm-font" }
-wezterm-gui-subcommands = { path = "wezterm-gui-subcommands" }
-wezterm-input-types = { version="0.1", path = "wezterm-input-types", default-features=false }
-wezterm-mux-server-impl = { path = "wezterm-mux-server-impl" }
-wezterm-open-url = { path = "wezterm-open-url" }
-wezterm-ssh = { path = "wezterm-ssh" }
-wezterm-surface = { path = "wezterm-surface" }
-wezterm-term = { path = "term" }
-wezterm-toast-notification = { path = "wezterm-toast-notification" }
-wezterm-uds = { path = "wezterm-uds" }
-wezterm-version = { path = "wezterm-version" }
+terminux-bidi = { version="0.2.3", path = "bidi", default-features=false}
+terminux-blob-leases = { version="0.1.1", path = "terminux-blob-leases"}
+terminux-cell = { path = "terminux-cell"}
+terminux-char-props = { path = "terminux-char-props", default-features=false }
+terminux-client = { path = "terminux-client" }
+terminux-color-types = { version="0.3", path = "color-types", default-features=false }
+terminux-config-derive = { version="0.1", path="config/derive" }
+terminux-dynamic = { version = "0.2.1", path = "terminux-dynamic", default-features=false }
+terminux-dynamic-derive = { version="0.1.1", path="terminux-dynamic/derive" }
+terminux-escape-parser = { version="0.1.0", path="terminux-escape-parser" }
+terminux-font = { path = "terminux-font" }
+terminux-gui-subcommands = { path = "terminux-gui-subcommands" }
+terminux-input-types = { version="0.1", path = "terminux-input-types", default-features=false }
+terminux-mux-server-impl = { path = "terminux-mux-server-impl" }
+terminux-open-url = { path = "terminux-open-url" }
+terminux-ssh = { path = "terminux-ssh" }
+terminux-surface = { path = "terminux-surface" }
+terminux-term = { path = "term" }
+terminux-toast-notification = { path = "terminux-toast-notification" }
+terminux-uds = { path = "terminux-uds" }
+terminux-version = { path = "terminux-version" }
 wgpu = "25.0.2"
 whoami = "1.5"
 winapi = "0.3.9"

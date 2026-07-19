@@ -19,4 +19,4 @@ pub use fromdynamic::{FromDynamic, FromDynamicOptions, UnknownFieldAction};
 pub use object::{BorrowedKey, Object, ObjectKeyTrait};
 pub use todynamic::{PlaceDynamic, ToDynamic};
 pub use value::Value;
-pub use wezterm_dynamic_derive::{FromDynamic, ToDynamic};
+pub use terminux_dynamic_derive::{FromDynamic, ToDynamic};

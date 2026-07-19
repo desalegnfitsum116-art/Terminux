@@ -21,7 +21,7 @@ lazy_static::lazy_static! {
 
 fn apply_nightly_version(metadata: &mut ColorSchemeMetaData) {
     metadata
-        .wezterm_version
+        .terminux_version
         .replace("nightly builds only".to_string());
 }
 
@@ -156,7 +156,7 @@ pub const SCHEMES: [(&'static str, &'static str); {count}] = [\n
     // Summarize new schemes for the changelog
     let mut new_items = vec![];
     for s in &all {
-        if s.data.metadata.wezterm_version.as_deref() == Some("nightly builds only") {
+        if s.data.metadata.terminux_version.as_deref() == Some("nightly builds only") {
             let (prefix, _) = make_prefix(&s.name);
             let ident = make_ident(&s.name);
             new_items.push(format!(
@@ -219,12 +219,12 @@ impl SchemeSet {
             struct MetaData {
                 name: String,
                 aliases: Vec<String>,
-                wezterm_version: Option<String>,
+                terminux_version: Option<String>,
             }
 
             let existing: Vec<Entry> = serde_json::from_str(&data)?;
             for item in existing {
-                if let Some(version) = &item.metadata.wezterm_version {
+                if let Some(version) = &item.metadata.terminux_version {
                     let ident = serde_json::to_string(&item.colors)?;
                     version_by_color_scheme.insert(ident.to_string(), version.to_string());
                     version_by_name.insert(item.metadata.name.to_string(), version.to_string());
@@ -295,7 +295,7 @@ impl SchemeSet {
             candidate
                 .data
                 .metadata
-                .wezterm_version
+                .terminux_version
                 .replace(version.to_string());
         }
 

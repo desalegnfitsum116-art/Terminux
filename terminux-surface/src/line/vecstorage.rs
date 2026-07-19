@@ -3,7 +3,7 @@ use alloc::sync::Arc;
 #[cfg(feature = "use_serde")]
 use serde::{Deserialize, Serialize};
 use unicode_segmentation::UnicodeSegmentation;
-use wezterm_cell::Cell;
+use terminux_cell::Cell;
 
 extern crate alloc;
 use alloc::vec::Vec;

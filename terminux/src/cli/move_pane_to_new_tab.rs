@@ -1,13 +1,13 @@
 use clap::Parser;
 use mux::pane::PaneId;
 use mux::window::WindowId;
-use wezterm_client::client::Client;
+use terminux_client::client::Client;
 
 #[derive(Debug, Parser, Clone)]
 pub struct MovePaneToNewTab {
     /// Specify the pane that should be moved.
     /// The default is to use the current pane based on the
-    /// environment variable WEZTERM_PANE.
+    /// environment variable TERMINUX_PANE.
     #[arg(long)]
     pane_id: Option<PaneId>,
 

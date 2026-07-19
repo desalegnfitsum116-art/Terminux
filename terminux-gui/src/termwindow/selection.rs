@@ -4,7 +4,7 @@ use mux::pane::{Pane, PaneId};
 use std::cell::RefMut;
 use std::sync::Arc;
 use termwiz::surface::Line;
-use wezterm_term::StableRowIndex;
+use terminux_term::StableRowIndex;
 
 impl super::TermWindow {
     pub fn selection(&self, pane_id: PaneId) -> RefMut<'_, Selection> {

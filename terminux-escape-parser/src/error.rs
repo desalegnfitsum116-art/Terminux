@@ -62,7 +62,7 @@ pub enum InternalError {
 
     #[cfg(feature = "image")]
     #[error(transparent)]
-    BlobLease(#[from] wezterm_blob_leases::Error),
+    BlobLease(#[from] terminux_blob_leases::Error),
 
     #[cfg(feature = "use_image")]
     #[error(transparent)]

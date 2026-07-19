@@ -3,7 +3,7 @@ use mux::domain::{Domain, LocalDomain};
 use mux::ssh::RemoteSshDomain;
 use mux::Mux;
 use std::sync::Arc;
-use wezterm_client::domain::{ClientDomain, ClientDomainConfig};
+use terminux_client::domain::{ClientDomain, ClientDomainConfig};
 
 pub mod dispatch;
 pub mod local;
@@ -17,7 +17,7 @@ fn client_domains(config: &config::ConfigHandle) -> Vec<ClientDomainConfig> {
     }
 
     for ssh_dom in config.ssh_domains().into_iter() {
-        if ssh_dom.multiplexing == SshMultiplexing::WezTerm {
+        if ssh_dom.multiplexing == SshMultiplexing::Terminux {
             domains.push(ClientDomainConfig::Ssh(ssh_dom.clone()));
         }
     }

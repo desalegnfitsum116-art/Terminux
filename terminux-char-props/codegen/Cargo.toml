@@ -1,5 +1,5 @@
 [package]
-name = "wezterm-char-props-codegen"
+name = "terminux-char-props-codegen"
 version = "0.1.0"
 edition = "2021"
 

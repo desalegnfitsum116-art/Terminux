@@ -1,6 +1,6 @@
 use maplit::btreemap;
 use ordered_float::OrderedFloat;
-use wezterm_dynamic::{FromDynamic, Object, ToDynamic, Value};
+use terminux_dynamic::{FromDynamic, Object, ToDynamic, Value};
 
 #[derive(FromDynamic, Debug, PartialEq)]
 struct SimpleStruct {

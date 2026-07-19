@@ -25,8 +25,8 @@ use termwiz::lineedit::{LineEditBuffer, Movement};
 use termwiz::surface::{CursorVisibility, SequenceNo, SEQ_ZERO};
 use unicode_segmentation::*;
 use url::Url;
-use wezterm_term::color::ColorPalette;
-use wezterm_term::{
+use terminux_term::color::ColorPalette;
+use terminux_term::{
     unicode_column_width, Clipboard, KeyCode, KeyModifiers, Line, MouseEvent, SemanticType,
     StableRowIndex, TerminalSize,
 };

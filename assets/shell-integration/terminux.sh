@@ -1,9 +1,9 @@
 # shellcheck shell=bash
 
-# This file hooks up shell integration for wezterm.
+# This file hooks up shell integration for terminux.
 # It is suitable for zsh and bash.
 #
-# Although wezterm is mentioned here, the sequences used are not wezterm
+# Although terminux is mentioned here, the sequences used are not terminux
 # specific and may provide the same functionality for other terminals.  Most
 # terminals are good at ignoring OSC sequences that they don't understand, but
 # if not there are some bypasses:
@@ -38,7 +38,7 @@ esac
 
 # This function wraps bash-preexec.sh so that it can be included verbatim
 # in this file, even though it uses `return` to short-circuit in some cases.
-__wezterm_install_bash_prexec() {
+__terminux_install_bash_prexec() {
 
 # bash-preexec.sh -- Bash support for ZSH-like 'preexec' and 'precmd' functions.
 # https://github.com/rcaloras/bash-preexec
@@ -421,18 +421,18 @@ if [[ -z "${__bp_delay_install:-}" ]]; then
     __bp_install_after_session_init
 fi;
 
-} # end of __wezterm_install_bash_prexec
+} # end of __terminux_install_bash_prexec
 
 # blesh provides it's own preexec mechanism which is recommended over bash-preexec
 # See https://github.com/akinomyoga/ble.sh/wiki/Manual-%C2%A71-Introduction#user-content-fn-blehook for more details
 if [[ ! -n "${BLE_VERSION-}" ]]; then
-  __wezterm_install_bash_prexec
+  __terminux_install_bash_prexec
 fi
 
 # This function emits an OSC 1337 sequence to set a user var
 # associated with the current terminal pane.
 # It requires the `base64` utility to be available in the path.
-__wezterm_set_user_var() {
+__terminux_set_user_var() {
   if hash base64 2>/dev/null ; then
     if [[ -z "${TMUX-}" ]] ; then
       printf "\033]1337;SetUserVar=%s=%s\007" "$1" `echo -n "$2" | base64`
@@ -446,12 +446,12 @@ __wezterm_set_user_var() {
 
 # This function emits an OSC 7 sequence to inform the terminal
 # of the current working directory.  It prefers to use a helper
-# command provided by wezterm if wezterm is installed, but falls
+# command provided by terminux if terminux is installed, but falls
 # back to a simple printf command otherwise.
-__wezterm_osc7() {
-  if hash wezterm 2>/dev/null ; then
-    wezterm set-working-directory 2>/dev/null && return 0
-    # If the command failed (perhaps the installed wezterm
+__terminux_osc7() {
+  if hash terminux 2>/dev/null ; then
+    terminux set-working-directory 2>/dev/null && return 0
+    # If the command failed (perhaps the installed terminux
     # is too old?) then fall back to the simple version below.
   fi
   printf "\033]7;file://%s%s\033\\" "${HOSTNAME}" "${PWD}"
@@ -460,12 +460,12 @@ __wezterm_osc7() {
 # The semantic precmd and prexec functions generate semantic
 # zones, marking up the prompt, the user input and the command
 # output so that the terminal can better reason about the display.
-__wezterm_semantic_precmd_executing=""
-__wezterm_semantic_precmd() {
+__terminux_semantic_precmd_executing=""
+__terminux_semantic_precmd() {
   local ret="$?"
-  if [[ "$__wezterm_semantic_precmd_executing" != "0" ]] ; then
-    __wezterm_save_ps1="$PS1"
-    __wezterm_save_ps2="$PS2"
+  if [[ "$__terminux_semantic_precmd_executing" != "0" ]] ; then
+    __terminux_save_ps1="$PS1"
+    __terminux_save_ps2="$PS2"
     # Markup the left and right prompts so that the terminal
     # knows that they are semantically prompt output.
     if [[ -n "${ZSH_NAME-}" ]] ; then
@@ -475,9 +475,9 @@ __wezterm_semantic_precmd() {
       PS1='\[\e]133;P;k=i\a\]'$PS1'\[\e]133;B\a\]'
       PS2='\[\e]133;P;k=s\a\]'$PS2'\[\e]133;B\a\]'
     fi
-    __wezterm_check_ps1="$PS1"
+    __terminux_check_ps1="$PS1"
   fi
-  if [[ "$__wezterm_semantic_precmd_executing" != "" ]] ; then
+  if [[ "$__terminux_semantic_precmd_executing" != "" ]] ; then
     # Report last command status
     printf "\033]133;D;%s;aid=%s\007" "$ret" "$$"
   fi
@@ -490,53 +490,53 @@ __wezterm_semantic_precmd() {
   else
     printf "\033]133;A;cl=m;aid=%s\007" "$$"
   fi
-  __wezterm_semantic_precmd_executing=0
+  __terminux_semantic_precmd_executing=0
 }
 
-function __wezterm_semantic_preexec() {
+function __terminux_semantic_preexec() {
   # Restore the original PS1/PS2 if set
-  if [[ -n "${__wezterm_save_ps1+1}" && "${__wezterm_check_ps1-}" == "${PS1}" ]]; then
-	  PS1="$__wezterm_save_ps1"
-	  PS2="$__wezterm_save_ps2"
-	  unset __wezterm_save_ps1
+  if [[ -n "${__terminux_save_ps1+1}" && "${__terminux_check_ps1-}" == "${PS1}" ]]; then
+	  PS1="$__terminux_save_ps1"
+	  PS2="$__terminux_save_ps2"
+	  unset __terminux_save_ps1
   fi
   # Indicate that the command output begins here
   printf "\033]133;C;\007"
-  __wezterm_semantic_precmd_executing=1
+  __terminux_semantic_precmd_executing=1
 }
 
-__wezterm_user_vars_precmd() {
-  __wezterm_set_user_var "WEZTERM_PROG" ""
-  __wezterm_set_user_var "WEZTERM_USER" "$(id -un)"
+__terminux_user_vars_precmd() {
+  __terminux_set_user_var "WEZTERM_PROG" ""
+  __terminux_set_user_var "WEZTERM_USER" "$(id -un)"
 
   # Indicate whether this pane is running inside tmux or not
   if [[ -n "${TMUX-}" ]] ; then
-    __wezterm_set_user_var "WEZTERM_IN_TMUX" "1"
+    __terminux_set_user_var "WEZTERM_IN_TMUX" "1"
   else
-    __wezterm_set_user_var "WEZTERM_IN_TMUX" "0"
+    __terminux_set_user_var "WEZTERM_IN_TMUX" "0"
   fi
 
   # You may set WEZTERM_HOSTNAME to a name you want to use instead
   # of calling out to the hostname executable on every prompt print.
 if [[ -z "${WEZTERM_HOSTNAME}" ]]; then
   if [[ -r /proc/sys/kernel/hostname ]]; then
-    __wezterm_set_user_var "WEZTERM_HOST" "$(cat /proc/sys/kernel/hostname)"
+    __terminux_set_user_var "WEZTERM_HOST" "$(cat /proc/sys/kernel/hostname)"
   elif hash hostname 2>/dev/null; then
-    __wezterm_set_user_var "WEZTERM_HOST" "$(hostname)"
+    __terminux_set_user_var "WEZTERM_HOST" "$(hostname)"
   elif hash hostnamectl 2>/dev/null; then
-    __wezterm_set_user_var "WEZTERM_HOST" "$(hostnamectl hostname)"
+    __terminux_set_user_var "WEZTERM_HOST" "$(hostnamectl hostname)"
   else
-    __wezterm_set_user_var "WEZTERM_HOST" "unknown"
+    __terminux_set_user_var "WEZTERM_HOST" "unknown"
   fi
 else
-  __wezterm_set_user_var "WEZTERM_HOST" "${WEZTERM_HOSTNAME}"
+  __terminux_set_user_var "WEZTERM_HOST" "${WEZTERM_HOSTNAME}"
 fi
 
 }
 
-__wezterm_user_vars_preexec() {
-  # Tell wezterm the full command that is being run
-  __wezterm_set_user_var "WEZTERM_PROG" "$1"
+__terminux_user_vars_preexec() {
+  # Tell terminux the full command that is being run
+  __terminux_set_user_var "WEZTERM_PROG" "$1"
 }
 
 # Register the various functions; take care to perform osc7 after
@@ -544,29 +544,29 @@ __wezterm_user_vars_preexec() {
 # status before we've had a chance to report it to the terminal
 if [[ -z "${WEZTERM_SHELL_SKIP_SEMANTIC_ZONES-}" ]]; then
   if [[ -n "${BLE_VERSION-}" ]]; then
-    blehook PRECMD+=__wezterm_semantic_precmd
-    blehook PREEXEC+=__wezterm_semantic_preexec
+    blehook PRECMD+=__terminux_semantic_precmd
+    blehook PREEXEC+=__terminux_semantic_preexec
   else
-    precmd_functions+=(__wezterm_semantic_precmd)
-    preexec_functions+=(__wezterm_semantic_preexec)
+    precmd_functions+=(__terminux_semantic_precmd)
+    preexec_functions+=(__terminux_semantic_preexec)
   fi
 fi
 
 if [[ -z "${WEZTERM_SHELL_SKIP_USER_VARS-}" ]]; then
   if [[ -n "${BLE_VERSION-}" ]]; then
-    blehook PRECMD+=__wezterm_user_vars_precmd
-    blehook PREEXEC+=__wezterm_user_vars_preexec
+    blehook PRECMD+=__terminux_user_vars_precmd
+    blehook PREEXEC+=__terminux_user_vars_preexec
   else
-    precmd_functions+=(__wezterm_user_vars_precmd)
-    preexec_functions+=(__wezterm_user_vars_preexec)
+    precmd_functions+=(__terminux_user_vars_precmd)
+    preexec_functions+=(__terminux_user_vars_preexec)
   fi
 fi
 
 if [[ -z "${WEZTERM_SHELL_SKIP_CWD-}" ]] ; then
   if [[ -n "${BLE_VERSION-}" ]]; then
-    blehook PRECMD+=__wezterm_osc7
+    blehook PRECMD+=__terminux_osc7
   else
-    precmd_functions+=(__wezterm_osc7)
+    precmd_functions+=(__terminux_osc7)
   fi
 fi
 

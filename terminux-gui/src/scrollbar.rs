@@ -1,5 +1,5 @@
 use mux::pane::Pane;
-use wezterm_term::StableRowIndex;
+use terminux_term::StableRowIndex;
 
 pub struct ScrollHit {
     /// Offset from the top of the window in pixels

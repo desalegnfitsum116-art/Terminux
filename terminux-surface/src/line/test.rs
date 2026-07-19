@@ -6,7 +6,7 @@ use crate::line::clusterline::ClusteredLine;
 use crate::SEQ_ZERO;
 use alloc::sync::Arc;
 use k9::assert_equal as assert_eq;
-use wezterm_cell::{Cell, CellAttributes};
+use terminux_cell::{Cell, CellAttributes};
 
 /// There are 4 double-wide graphemes that occupy 2 cells each.
 /// When we join the lines, we must preserve the invisible blank
@@ -302,7 +302,7 @@ Line {
 }
 
 fn bold() -> CellAttributes {
-    use wezterm_cell::Intensity;
+    use terminux_cell::Intensity;
     let mut attr = CellAttributes::default();
     attr.set_intensity(Intensity::Bold);
     attr

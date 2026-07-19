@@ -9,40 +9,40 @@ use termwiz::color::{AnsiColor, ColorAttribute, ColorSpec, SrgbaTuple};
 use termwiz::render::terminfo::TerminfoRenderer;
 use termwiz::surface::change::Change;
 use termwiz::surface::Line;
-use wezterm_dynamic::{FromDynamic, ToDynamic};
+use terminux_dynamic::{FromDynamic, ToDynamic};
 
 pub fn register(lua: &Lua) -> anyhow::Result<()> {
-    let wezterm_mod = get_or_create_module(lua, "wezterm")?;
-    wezterm_mod.set("nerdfonts", NerdFonts {})?;
-    wezterm_mod.set("format", lua.create_function(format)?)?;
-    wezterm_mod.set(
+    let terminux_mod = get_or_create_module(lua, "wezterm")?;
+    terminux_mod.set("nerdfonts", NerdFonts {})?;
+    terminux_mod.set("format", lua.create_function(format)?)?;
+    terminux_mod.set(
         "column_width",
         lua.create_function(|_, s: String| Ok(unicode_column_width(&s, None)))?,
     )?;
 
-    wezterm_mod.set(
+    terminux_mod.set(
         "pad_right",
         lua.create_function(|_, (s, width): (String, usize)| Ok(pad_right(s, width)))?,
     )?;
 
-    wezterm_mod.set(
+    terminux_mod.set(
         "pad_left",
         lua.create_function(|_, (s, width): (String, usize)| Ok(pad_left(s, width)))?,
     )?;
 
-    wezterm_mod.set(
+    terminux_mod.set(
         "truncate_right",
         lua.create_function(|_, (s, max_width): (String, usize)| {
             Ok(truncate_right(&s, max_width))
         })?,
     )?;
 
-    wezterm_mod.set(
+    terminux_mod.set(
         "truncate_left",
         lua.create_function(|_, (s, max_width): (String, usize)| Ok(truncate_left(&s, max_width)))?,
     )?;
-    wezterm_mod.set("permute_any_mods", lua.create_function(permute_any_mods)?)?;
-    wezterm_mod.set(
+    terminux_mod.set("permute_any_mods", lua.create_function(permute_any_mods)?)?;
+    terminux_mod.set(
         "permute_any_or_no_mods",
         lua.create_function(permute_any_or_no_mods)?,
     )?;
@@ -203,7 +203,7 @@ fn permute_mods<'lua>(
     item: mlua::Table,
     allow_none: bool,
 ) -> mlua::Result<Vec<mlua::Value<'lua>>> {
-    use wezterm_input_types::Modifiers;
+    use terminux_input_types::Modifiers;
 
     let mut result = vec![];
     for ctrl in &[Modifiers::NONE, Modifiers::CTRL] {
@@ -254,8 +254,8 @@ lazy_static::lazy_static! {
                 .color_level(Some(ColorLevel::TrueColor))
                 .colorterm(None)
                 .colorterm_bce(None)
-                .term_program(Some("WezTerm".into()))
-                .term_program_version(Some(config::wezterm_version().into())),
+                .term_program(Some("Terminux".into()))
+                .term_program_version(Some(config::terminux_version().into())),
         )
         .expect("cannot fail to make internal Capabilities")
     };

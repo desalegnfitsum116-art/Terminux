@@ -18,9 +18,9 @@ use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
 use termwiz::cell::Presentation;
 use thiserror::Error;
-use wezterm_bidi::Direction;
-use wezterm_term::{CellAttributes, Intensity};
-use wezterm_toast_notification::ToastNotification;
+use terminux_bidi::Direction;
+use terminux_term::{CellAttributes, Intensity};
+use terminux_toast_notification::ToastNotification;
 
 mod hbwrap;
 
@@ -1013,7 +1013,7 @@ impl FontConfigInner {
         }
 
         let would_bright = match attrs.foreground() {
-            wezterm_term::color::ColorAttribute::PaletteIndex(idx) if idx < 8 => {
+            terminux_term::color::ColorAttribute::PaletteIndex(idx) if idx < 8 => {
                 attrs.intensity() == Intensity::Bold
             }
             _ => false,

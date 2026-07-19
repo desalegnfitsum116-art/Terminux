@@ -2,7 +2,7 @@ use crate::{Result, ensure, format_err};
 use core::hash::{Hash, Hasher};
 #[cfg(feature = "use_serde")]
 use serde::{Deserialize, Serialize};
-use wezterm_dynamic::{FromDynamic, ToDynamic};
+use terminux_dynamic::{FromDynamic, ToDynamic};
 
 use crate::allocate::*;
 

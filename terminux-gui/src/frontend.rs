@@ -14,8 +14,8 @@ use std::cell::RefCell;
 use std::collections::{BTreeMap, HashSet};
 use std::rc::Rc;
 use std::sync::Arc;
-use wezterm_term::{Alert, ClipboardSelection};
-use wezterm_toast_notification::*;
+use terminux_term::{Alert, ClipboardSelection};
+use terminux_toast_notification::*;
 
 pub struct GuiFrontEnd {
     connection: Rc<Connection>,
@@ -231,7 +231,7 @@ impl GuiFrontEnd {
                 };
                 promise::spawn::spawn(async move {
                     use config::keyassignment::SpawnTabDomain;
-                    use wezterm_term::TerminalSize;
+                    use terminux_term::TerminalSize;
 
                     // We send the script to execute to the shell on stdin, rather than ask the
                     // shell to execute it directly, so that we start the shell and read in the

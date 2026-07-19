@@ -1,8 +1,8 @@
 use crate::line::CellRef;
 use alloc::borrow::Cow;
-use wezterm_bidi::{BidiContext, Direction, ParagraphDirectionHint};
-use wezterm_cell::CellAttributes;
-use wezterm_char_props::emoji::Presentation;
+use terminux_bidi::{BidiContext, Direction, ParagraphDirectionHint};
+use terminux_cell::CellAttributes;
+use terminux_char_props::emoji::Presentation;
 
 extern crate alloc;
 use alloc::string::String;

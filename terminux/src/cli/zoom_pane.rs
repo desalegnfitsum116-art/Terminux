@@ -3,13 +3,13 @@ use clap::Parser;
 use codec::SetPaneZoomed;
 use mux::pane::PaneId;
 use std::collections::HashMap;
-use wezterm_client::client::Client;
+use terminux_client::client::Client;
 
 #[derive(Debug, Parser, Clone)]
 pub struct ZoomPane {
     /// Specify the target pane.
     /// The default is to use the current pane based on the
-    /// environment variable WEZTERM_PANE.
+    /// environment variable TERMINUX_PANE.
     #[arg(long)]
     pane_id: Option<PaneId>,
 

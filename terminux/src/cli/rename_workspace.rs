@@ -1,7 +1,7 @@
 use clap::Parser;
 use mux::pane::PaneId;
 use std::collections::HashMap;
-use wezterm_client::client::Client;
+use terminux_client::client::Client;
 
 #[derive(Debug, Parser, Clone)]
 pub struct RenameWorkspace {
@@ -11,7 +11,7 @@ pub struct RenameWorkspace {
 
     /// Specify the current pane.
     /// The default is to use the current pane based on the
-    /// environment variable WEZTERM_PANE.
+    /// environment variable TERMINUX_PANE.
     ///
     /// The pane is used to figure out which workspace
     /// should be renamed.

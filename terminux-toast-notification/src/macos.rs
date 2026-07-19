@@ -33,7 +33,7 @@ fn ns_error_to_string(err: *mut NSError) -> String {
 
 define_class!(
     #[unsafe(super = NSObject)]
-    #[name = "WezTermNotifDelegate"]
+    #[name = "TerminuxNotifDelegate"]
     #[derive(Debug)]
     struct NotifDelegate;
 
@@ -69,7 +69,7 @@ define_class!(
 
             if let Some(url) = url {
                 if let Ok(url_str) = url.downcast::<NSString>() {
-                    wezterm_open_url::open_url(&url_str.to_string());
+                    terminux_open_url::open_url(&url_str.to_string());
                 }
             }
 

@@ -18,7 +18,7 @@ use std::hash::{Hash, Hasher};
 use std::sync::{Arc, Mutex, MutexGuard};
 use std::time::Duration;
 #[cfg(feature = "std")]
-use wezterm_blob_leases::{BlobLease, BlobManager};
+use terminux_blob_leases::{BlobLease, BlobManager};
 
 #[cfg(feature = "use_serde")]
 fn deserialize_notnan<'de, D>(deserializer: D) -> Result<NotNan<f32>, D::Error>
@@ -207,7 +207,7 @@ pub enum ImageDataType {
     EncodedLease(
         #[cfg_attr(
             feature = "use_serde",
-            serde(with = "wezterm_blob_leases::lease_bytes")
+            serde(with = "terminux_blob_leases::lease_bytes")
         )]
         BlobLease,
     ),
@@ -365,7 +365,7 @@ impl ImageDataType {
         match self {
             Self::EncodedFile(data) => match BlobManager::store(&data) {
                 Ok(lease) => Ok(Self::EncodedLease(lease)),
-                Err(wezterm_blob_leases::Error::StorageNotInit) => Ok(Self::EncodedFile(data)),
+                Err(terminux_blob_leases::Error::StorageNotInit) => Ok(Self::EncodedFile(data)),
                 Err(err) => Err(err.into()),
             },
             other => Ok(other),
@@ -508,7 +508,7 @@ pub enum ImageCellError {
     Io(#[from] std::io::Error),
 
     #[error(transparent)]
-    BlobLease(#[from] wezterm_blob_leases::Error),
+    BlobLease(#[from] terminux_blob_leases::Error),
 
     #[error(transparent)]
     ImageError(#[from] image::ImageError),

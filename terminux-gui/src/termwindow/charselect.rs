@@ -21,7 +21,7 @@ use std::cell::{Ref, RefCell};
 use std::collections::HashMap;
 use std::path::PathBuf;
 use termwiz::input::Modifiers;
-use wezterm_term::{KeyCode, KeyModifiers, MouseEvent};
+use terminux_term::{KeyCode, KeyModifiers, MouseEvent};
 use window::color::LinearRgba;
 
 struct MatchResults {

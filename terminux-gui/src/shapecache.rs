@@ -2,8 +2,8 @@ use crate::customglyph::BlockKey;
 use crate::glyphcache::CachedGlyph;
 use config::TextStyle;
 use std::rc::Rc;
-use wezterm_font::shaper::GlyphInfo;
-use wezterm_font::units::*;
+use terminux_font::shaper::GlyphInfo;
+use terminux_font::units::*;
 
 #[derive(PartialEq, Eq, Hash, Clone, Debug)]
 pub struct ShapeCacheKey {
@@ -121,9 +121,9 @@ mod test {
     use std::rc::Rc;
     use termwiz::cell::CellAttributes;
     use termwiz::surface::{Line, SEQ_ZERO};
-    use wezterm_bidi::Direction;
-    use wezterm_font::shaper::PresentationWidth;
-    use wezterm_font::{FontConfiguration, LoadedFont};
+    use terminux_bidi::Direction;
+    use terminux_font::shaper::PresentationWidth;
+    use terminux_font::{FontConfiguration, LoadedFont};
 
     fn cluster_and_shape(
         render_metrics: &RenderMetrics,

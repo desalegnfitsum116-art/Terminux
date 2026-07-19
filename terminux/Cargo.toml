@@ -1,5 +1,5 @@
 [package]
-name = "wezterm"
+name = "terminux"
 version = "0.1.0"
 authors = ["Wez Furlong <wez@wezfurlong.org>"]
 edition = "2018"
@@ -36,9 +36,9 @@ termwiz.workspace = true
 textwrap.workspace  =true
 umask.workspace = true
 url.workspace = true
-wezterm-client.workspace = true
-wezterm-gui-subcommands.workspace = true
-wezterm-term.workspace = true
+terminux-client.workspace = true
+terminux-gui-subcommands.workspace = true
+terminux-term.workspace = true
 
 [target."cfg(unix)".dependencies]
 termios.workspace = true

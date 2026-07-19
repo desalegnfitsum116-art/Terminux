@@ -15,7 +15,7 @@ use portable_pty::CommandBuilder;
 use promise::spawn::spawn_into_new_thread;
 use std::collections::{HashMap, HashSet};
 use std::sync::{Arc, Mutex};
-use wezterm_term::TerminalSize;
+use terminux_term::TerminalSize;
 
 pub struct ClientInner {
     pub client: Client,

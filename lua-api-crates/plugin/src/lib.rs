@@ -6,7 +6,7 @@ use git2::{Remote, Repository};
 use luahelper::to_lua;
 use std::path::PathBuf;
 use tempfile::TempDir;
-use wezterm_dynamic::{FromDynamic, ToDynamic};
+use terminux_dynamic::{FromDynamic, ToDynamic};
 
 #[derive(FromDynamic, ToDynamic, Debug)]
 struct RepoSpec {

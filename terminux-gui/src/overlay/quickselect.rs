@@ -17,8 +17,8 @@ use termwiz::cell::{Cell, CellAttributes};
 use termwiz::color::AnsiColor;
 use termwiz::surface::{SequenceNo, SEQ_ZERO};
 use url::Url;
-use wezterm_term::color::ColorPalette;
-use wezterm_term::{
+use terminux_term::color::ColorPalette;
+use terminux_term::{
     Clipboard, Intensity, KeyCode, KeyModifiers, Line, MouseEvent, StableRowIndex, TerminalSize,
 };
 use window::WindowOps;
@@ -546,7 +546,7 @@ impl Pane for QuickSelectOverlay {
         // move to the search box
         let renderer = self.renderer.lock();
         StableCursorPosition {
-            x: 8 + wezterm_term::unicode_column_width(&renderer.selection, None),
+            x: 8 + terminux_term::unicode_column_width(&renderer.selection, None),
             y: renderer.compute_search_row(),
             shape: termwiz::surface::CursorShape::SteadyBlock,
             visibility: termwiz::surface::CursorVisibility::Visible,

@@ -4,7 +4,7 @@ use ::window::WindowOps;
 use anyhow::Context;
 use smol::Timer;
 use std::time::{Duration, Instant};
-use wezterm_font::ClearShapeCache;
+use terminux_font::ClearShapeCache;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum AllowImage {

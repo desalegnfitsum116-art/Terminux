@@ -1,5 +1,5 @@
 [package]
-name = "wezterm-client"
+name = "terminux-client"
 version = "0.1.0"
 authors = ["Wez Furlong <wez@wezfurlong.org>"]
 edition = "2018"
@@ -34,10 +34,10 @@ textwrap.workspace = true
 thiserror.workspace = true
 umask.workspace = true
 url.workspace = true
-wezterm-dynamic.workspace = true
-wezterm-ssh.workspace = true
-wezterm-term = { workspace=true, features=["use_serde"] }
-wezterm-uds.workspace = true
+terminux-dynamic.workspace = true
+terminux-ssh.workspace = true
+terminux-term = { workspace=true, features=["use_serde"] }
+terminux-uds.workspace = true
 
 [target."cfg(windows)".dependencies]
 winapi = { workspace=true, features = [

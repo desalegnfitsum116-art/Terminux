@@ -1,4 +1,4 @@
-#	This is Wez's term definition for wezterm.
+#	This is Wez's term definition for terminux.
 #	It was reconstructed via infocmp from file: /lib/terminfo/x/xterm-256color
 #	and then has some additions in the top few lines (until the line starting
 #	with am).
@@ -21,8 +21,8 @@
 # https://codeberg.org/dnkl/foot/pulls/243/files
 # although we use OSC 0 for the title rather than OSC 2.
 # https://github.com/neovim/neovim/issues/20706
-# https://github.com/wezterm/wezterm/issues/2635
-wezterm|Wez's terminal emulator,
+# https://github.com/terminux/terminux/issues/2635
+terminux|Wez's terminal emulator,
   Tc,
   hs,
   Su,

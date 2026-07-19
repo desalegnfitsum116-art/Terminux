@@ -33,7 +33,7 @@ use std::path::{Path, PathBuf};
 use std::thread;
 use std::time::Duration;
 use thiserror::Error;
-use wezterm_uds::UnixStream;
+use terminux_uds::UnixStream;
 
 #[derive(Error, Debug)]
 #[error("Timeout")]
@@ -69,7 +69,7 @@ pub struct Client {
      {} (codec version {}).",
     version,
     codec_vers,
-    config::wezterm_version(),
+    config::terminux_version(),
     CODEC_VERSION
 )]
 pub struct IncompatibleVersionError {
@@ -670,7 +670,7 @@ impl Reconnectable {
     /// system, and we don't know if it is even running unix, or whether
     /// any given shell syntax will help us provide a more meaningful
     /// message to the user.
-    fn wezterm_bin_path(path: &Option<String>) -> String {
+    fn terminux_bin_path(path: &Option<String>) -> String {
         path.as_deref().unwrap_or("wezterm").to_string()
     }
 
@@ -683,7 +683,7 @@ impl Reconnectable {
         let ssh_config = mux::ssh::ssh_domain_to_ssh_config(&ssh_dom)?;
 
         let sess = ssh_connect_with_ui(ssh_config, ui)?;
-        let proxy_bin = Self::wezterm_bin_path(&ssh_dom.remote_wezterm_path);
+        let proxy_bin = Self::terminux_bin_path(&ssh_dom.remote_wezterm_path);
 
         let cmd = if let Some(cmd) = ssh_dom.override_proxy_command.clone() {
             cmd
@@ -860,7 +860,7 @@ impl Reconnectable {
             if self.tls_creds.is_none() {
                 // We need to bootstrap via an ssh session
 
-                let mut ssh_config = wezterm_ssh::Config::new();
+                let mut ssh_config = terminux_ssh::Config::new();
                 ssh_config.add_default_config_files();
 
                 let mut fields = ssh_params.host_and_port.split(':');
@@ -884,7 +884,7 @@ impl Reconnectable {
                     // obtain client credentials that we can use for tls.
                     let cmd = format!(
                         "{} cli tlscreds",
-                        Self::wezterm_bin_path(&tls_client.remote_wezterm_path)
+                        Self::terminux_bin_path(&tls_client.remote_wezterm_path)
                     );
 
                     ui.output_str(&format!("Running: {}\n", cmd));
@@ -1223,7 +1223,7 @@ impl Client {
         prefer_mux: bool,
         class_name: &str,
     ) -> anyhow::Result<config::UnixDomain> {
-        match std::env::var_os("WEZTERM_UNIX_SOCKET") {
+        match std::env::var_os("TERMINUX_UNIX_SOCKET") {
             Some(path) if !path.is_empty() => Ok(config::UnixDomain {
                 socket_path: Some(path.into()),
                 ..Default::default()
@@ -1245,7 +1245,7 @@ impl Client {
                     .first()
                     .ok_or_else(|| {
                         anyhow!(
-                            "no default unix domain is configured and WEZTERM_UNIX_SOCKET \
+                            "no default unix domain is configured and TERMINUX_UNIX_SOCKET \
                              is not set in the environment"
                         )
                     })?
@@ -1315,7 +1315,7 @@ impl Client {
         let pane_id: PaneId = match pane_id {
             Some(p) => p,
             None => {
-                if let Ok(pane) = std::env::var("WEZTERM_PANE") {
+                if let Ok(pane) = std::env::var("TERMINUX_PANE") {
                     pane.parse()?
                 } else {
                     let mut clients = self.list_clients().await?.clients;
@@ -1323,7 +1323,7 @@ impl Client {
                     clients.sort_by(|a, b| b.last_input.cmp(&a.last_input));
                     if clients.is_empty() {
                         anyhow::bail!(
-                            "--pane-id was not specified and $WEZTERM_PANE
+                            "--pane-id was not specified and $TERMINUX_PANE
                          is not set in the environment, and I couldn't
                          determine which pane was currently focused"
                         );

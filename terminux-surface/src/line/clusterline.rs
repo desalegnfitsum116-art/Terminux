@@ -5,7 +5,7 @@ use finl_unicode::grapheme_clusters::Graphemes;
 use fixedbitset::FixedBitSet;
 #[cfg(feature = "use_serde")]
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
-use wezterm_cell::{Cell, CellAttributes};
+use terminux_cell::{Cell, CellAttributes};
 
 extern crate alloc;
 use alloc::boxed::Box;

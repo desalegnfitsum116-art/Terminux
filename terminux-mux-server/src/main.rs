@@ -9,15 +9,15 @@ use std::process::Command;
 use std::rc::Rc;
 use std::sync::Arc;
 use std::thread;
-use wezterm_gui_subcommands::*;
-use wezterm_mux_server_impl::update_mux_domains_for_server;
+use terminux_gui_subcommands::*;
+use terminux_mux_server_impl::update_mux_domains_for_server;
 
 mod daemonize;
 
 #[derive(Debug, Parser)]
 #[command(
-    about = "Wez's Terminal Emulator\nhttp://github.com/wezterm/wezterm",
-    version = config::wezterm_version(),
+    about = "Terminux - GPU Accelerated Terminal Emulator\nhttp://github.com/wezterm/wezterm",
+    version = config::terminux_version(),
     trailing_var_arg = true,
 )]
 struct Opt {
@@ -65,11 +65,11 @@ struct Opt {
 
 fn main() {
     if let Err(err) = run() {
-        wezterm_blob_leases::clear_storage();
+        terminux_blob_leases::clear_storage();
         log::error!("{:#}", err);
         std::process::exit(1);
     }
-    wezterm_blob_leases::clear_storage();
+    terminux_blob_leases::clear_storage();
 }
 
 fn run() -> anyhow::Result<()> {
@@ -194,8 +194,8 @@ fn run() -> anyhow::Result<()> {
         "OLDPWD",
         "PWD",
         "SHLVL",
-        "WEZTERM_PANE",
-        "WEZTERM_UNIX_SOCKET",
+        "TERMINUX_PANE",
+        "TERMINUX_UNIX_SOCKET",
         "_",
     ] {
         std::env::remove_var(name);
@@ -204,8 +204,8 @@ fn run() -> anyhow::Result<()> {
         std::env::remove_var(name);
     }
 
-    wezterm_blob_leases::register_storage(Arc::new(
-        wezterm_blob_leases::simple_tempdir::SimpleTempDir::new_in(&*config::CACHE_DIR)?,
+    terminux_blob_leases::register_storage(Arc::new(
+        terminux_blob_leases::simple_tempdir::SimpleTempDir::new_in(&*config::CACHE_DIR)?,
     ))?;
 
     let need_builder = !opts.prog.is_empty() || opts.cwd.is_some();
@@ -310,8 +310,8 @@ mod ossl;
 pub fn spawn_listener() -> anyhow::Result<()> {
     let config = configuration();
     for unix_dom in &config.unix_domains {
-        std::env::set_var("WEZTERM_UNIX_SOCKET", unix_dom.socket_path());
-        let mut listener = wezterm_mux_server_impl::local::LocalListener::with_domain(unix_dom)?;
+        std::env::set_var("TERMINUX_UNIX_SOCKET", unix_dom.socket_path());
+        let mut listener = terminux_mux_server_impl::local::LocalListener::with_domain(unix_dom)?;
         thread::spawn(move || {
             listener.run();
         });

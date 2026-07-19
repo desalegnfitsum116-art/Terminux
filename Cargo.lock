@@ -480,7 +480,7 @@ dependencies = [
  "config",
  "luahelper",
  "starship-battery",
- "wezterm-dynamic",
+ "terminux-dynamic",
 ]
 
 [[package]]
@@ -872,10 +872,10 @@ dependencies = [
  "rangeset",
  "serde",
  "smol",
+ "terminux-term",
  "termwiz",
  "thiserror 1.0.69",
  "varbincode",
- "wezterm-term",
  "zstd",
 ]
 
@@ -907,9 +907,9 @@ dependencies = [
  "serde",
  "serde_json",
  "serde_yaml",
- "wezterm-color-types",
- "wezterm-dynamic",
- "wezterm-term",
+ "terminux-color-types",
+ "terminux-dynamic",
+ "terminux-term",
 ]
 
 [[package]]
@@ -977,15 +977,15 @@ dependencies = [
  "serde_json",
  "shlex 1.3.0",
  "smol",
+ "terminux-bidi",
+ "terminux-config-derive",
+ "terminux-dynamic",
+ "terminux-input-types",
+ "terminux-ssh",
+ "terminux-term",
  "termwiz",
  "toml 0.8.23",
  "umask",
- "wezterm-bidi",
- "wezterm-config-derive",
- "wezterm-dynamic",
- "wezterm-input-types",
- "wezterm-ssh",
- "wezterm-term",
  "winapi",
 ]
 
@@ -1519,11 +1519,11 @@ dependencies = [
  "share-data",
  "spawn-funcs",
  "ssh-funcs",
+ "terminux-version",
  "termwiz",
  "termwiz-funcs",
  "time-funcs",
  "url-funcs",
- "wezterm-version",
  "winapi",
 ]
 
@@ -3303,7 +3303,7 @@ dependencies = [
  "bstr",
  "log",
  "mlua",
- "wezterm-dynamic",
+ "terminux-dynamic",
 ]
 
 [[package]]
@@ -3552,14 +3552,14 @@ dependencies = [
  "shell-words",
  "smol",
  "terminfo",
+ "terminux-dynamic",
+ "terminux-ssh",
+ "terminux-term",
  "termwiz",
  "termwiz-funcs",
  "textwrap",
  "thiserror 1.0.69",
  "url",
- "wezterm-dynamic",
- "wezterm-ssh",
- "wezterm-term",
  "winapi",
 ]
 
@@ -3576,11 +3576,11 @@ dependencies = [
  "parking_lot",
  "portable-pty",
  "smol",
+ "terminux-dynamic",
+ "terminux-term",
  "termwiz",
  "termwiz-funcs",
  "url-funcs",
- "wezterm-dynamic",
- "wezterm-term",
 ]
 
 [[package]]
@@ -4317,7 +4317,7 @@ dependencies = [
  "log",
  "luahelper",
  "tempfile",
- "wezterm-dynamic",
+ "terminux-dynamic",
 ]
 
 [[package]]
@@ -4493,7 +4493,7 @@ dependencies = [
  "log",
  "luahelper",
  "ntapi",
- "wezterm-dynamic",
+ "terminux-dynamic",
  "winapi",
 ]
 
@@ -4506,7 +4506,7 @@ dependencies = [
  "libc",
  "luahelper",
  "procinfo",
- "wezterm-dynamic",
+ "terminux-dynamic",
 ]
 
 [[package]]
@@ -5186,8 +5186,8 @@ dependencies = [
  "luahelper",
  "serde_json",
  "serde_yaml",
+ "terminux-dynamic",
  "toml 0.8.23",
- "wezterm-dynamic",
 ]
 
 [[package]]
@@ -5348,7 +5348,7 @@ dependencies = [
  "lazy_static",
  "luahelper",
  "ordered-float 4.6.0",
- "wezterm-dynamic",
+ "terminux-dynamic",
 ]
 
 [[package]]
@@ -5526,8 +5526,8 @@ dependencies = [
  "log",
  "luahelper",
  "smol",
- "wezterm-dynamic",
- "wezterm-open-url",
+ "terminux-dynamic",
+ "terminux-open-url",
  "winapi",
 ]
 
@@ -5568,7 +5568,7 @@ dependencies = [
  "anyhow",
  "config",
  "luahelper",
- "wezterm-ssh",
+ "terminux-ssh",
 ]
 
 [[package]]
@@ -5709,9 +5709,9 @@ dependencies = [
  "sqlite-cache",
  "tar",
  "tempfile",
+ "terminux-dynamic",
  "tokio",
  "toml 0.8.23",
- "wezterm-dynamic",
 ]
 
 [[package]]
@@ -5818,6 +5818,537 @@ dependencies = [
 ]
 
 [[package]]
+name = "terminux"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "cc",
+ "chrono",
+ "clap",
+ "clap_complete",
+ "clap_complete_fig",
+ "codec",
+ "config",
+ "embed-resource",
+ "env-bootstrap",
+ "filedescriptor",
+ "hostname",
+ "humantime",
+ "image",
+ "libc",
+ "log",
+ "mux",
+ "portable-pty",
+ "promise",
+ "serde",
+ "serde_json",
+ "shell-words",
+ "smol",
+ "tabout",
+ "tempfile",
+ "terminux-client",
+ "terminux-gui-subcommands",
+ "terminux-term",
+ "termios",
+ "termwiz",
+ "termwiz-funcs",
+ "textwrap",
+ "umask",
+ "url",
+ "winapi",
+]
+
+[[package]]
+name = "terminux-bidi"
+version = "0.2.3"
+dependencies = [
+ "env_logger 0.11.10",
+ "k9",
+ "log",
+ "terminux-dynamic",
+]
+
+[[package]]
+name = "terminux-blob-leases"
+version = "0.1.1"
+dependencies = [
+ "getrandom 0.3.4",
+ "serde",
+ "sha2",
+ "tempfile",
+ "thiserror 1.0.69",
+ "uuid",
+]
+
+[[package]]
+name = "terminux-cell"
+version = "0.1.0"
+dependencies = [
+ "finl_unicode",
+ "image",
+ "log",
+ "ordered-float 4.6.0",
+ "serde",
+ "sha2",
+ "terminux-blob-leases",
+ "terminux-char-props",
+ "terminux-color-types",
+ "terminux-dynamic",
+ "terminux-escape-parser",
+ "thiserror 1.0.69",
+]
+
+[[package]]
+name = "terminux-char-props"
+version = "0.1.3"
+dependencies = [
+ "k9",
+ "phf",
+ "serde",
+ "ucd-trie",
+]
+
+[[package]]
+name = "terminux-client"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "async-io",
+ "async-trait",
+ "async_ossl",
+ "codec",
+ "config",
+ "filedescriptor",
+ "futures",
+ "lazy_static",
+ "libc",
+ "log",
+ "lru",
+ "metrics",
+ "mux",
+ "openssl",
+ "parking_lot",
+ "portable-pty",
+ "promise",
+ "rangeset",
+ "ratelim",
+ "smol",
+ "terminux-dynamic",
+ "terminux-ssh",
+ "terminux-term",
+ "terminux-uds",
+ "termwiz",
+ "textwrap",
+ "thiserror 1.0.69",
+ "umask",
+ "url",
+ "winapi",
+]
+
+[[package]]
+name = "terminux-color-types"
+version = "0.3.0"
+dependencies = [
+ "csscolorparser",
+ "deltae",
+ "num-traits",
+ "serde",
+ "terminux-dynamic",
+]
+
+[[package]]
+name = "terminux-config-derive"
+version = "0.1.0"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 1.0.109",
+]
+
+[[package]]
+name = "terminux-dynamic"
+version = "0.2.1"
+dependencies = [
+ "log",
+ "maplit",
+ "ordered-float 4.6.0",
+ "strsim",
+ "terminux-dynamic-derive",
+ "thiserror 2.0.18",
+]
+
+[[package]]
+name = "terminux-dynamic-derive"
+version = "0.1.1"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 1.0.109",
+]
+
+[[package]]
+name = "terminux-escape-parser"
+version = "0.1.0"
+dependencies = [
+ "base64 0.22.1",
+ "bitflags 2.11.1",
+ "criterion",
+ "env_logger 0.11.10",
+ "hex",
+ "image",
+ "k9",
+ "log",
+ "nix",
+ "num-derive",
+ "num-traits",
+ "ordered-float 4.6.0",
+ "pest",
+ "pest_derive",
+ "serde",
+ "sha2",
+ "terminux-blob-leases",
+ "terminux-color-types",
+ "terminux-dynamic",
+ "terminux-input-types",
+ "thiserror 2.0.18",
+ "vtparse",
+ "winapi",
+]
+
+[[package]]
+name = "terminux-font"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "cairo-rs",
+ "cocoa",
+ "config",
+ "core-foundation 0.10.0",
+ "core-text",
+ "dwrote",
+ "encoding_rs",
+ "enum-display-derive",
+ "env_logger 0.11.10",
+ "euclid",
+ "finl_unicode",
+ "fontconfig",
+ "freetype",
+ "harfbuzz",
+ "image",
+ "k9",
+ "lazy_static",
+ "lfucache",
+ "log",
+ "memmap2 0.9.10",
+ "metrics",
+ "objc",
+ "ordered-float 4.6.0",
+ "rangeset",
+ "terminux-bidi",
+ "terminux-color-types",
+ "terminux-input-types",
+ "terminux-term",
+ "terminux-toast-notification",
+ "termwiz",
+ "thiserror 1.0.69",
+ "walkdir",
+ "winapi",
+]
+
+[[package]]
+name = "terminux-gui"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "benchmarking",
+ "bitflags 1.3.2",
+ "bytemuck",
+ "cc",
+ "chrono",
+ "clap",
+ "codec",
+ "colorgrad",
+ "config",
+ "dhat",
+ "dirs-next",
+ "downcast-rs",
+ "embed-resource",
+ "emojis",
+ "env-bootstrap",
+ "env_logger 0.11.10",
+ "euclid",
+ "fastrand",
+ "filedescriptor",
+ "finl_unicode",
+ "frecency",
+ "futures",
+ "hdrhistogram",
+ "http_req",
+ "image",
+ "k9",
+ "lazy_static",
+ "lfucache",
+ "libc",
+ "log",
+ "luahelper",
+ "metrics",
+ "mlua",
+ "mux",
+ "mux-lua",
+ "nucleo-matcher",
+ "ordered-float 4.6.0",
+ "parking_lot",
+ "portable-pty",
+ "promise",
+ "rangeset",
+ "ratelim",
+ "rayon",
+ "regex",
+ "serde",
+ "serde_json",
+ "shared_library",
+ "shlex 1.3.0",
+ "smol",
+ "tabout",
+ "tempfile",
+ "terminfo",
+ "terminux-bidi",
+ "terminux-blob-leases",
+ "terminux-client",
+ "terminux-dynamic",
+ "terminux-font",
+ "terminux-gui-subcommands",
+ "terminux-mux-server-impl",
+ "terminux-open-url",
+ "terminux-ssh",
+ "terminux-term",
+ "terminux-toast-notification",
+ "termwiz",
+ "termwiz-funcs",
+ "textwrap",
+ "thiserror 1.0.69",
+ "tiny-skia",
+ "umask",
+ "unicode-normalization",
+ "unicode-segmentation",
+ "url",
+ "url-funcs",
+ "walkdir",
+ "wgpu",
+ "winapi",
+ "window",
+ "window-funcs",
+ "windows 0.33.0",
+]
+
+[[package]]
+name = "terminux-gui-subcommands"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "config",
+]
+
+[[package]]
+name = "terminux-input-types"
+version = "0.1.0"
+dependencies = [
+ "bitflags 1.3.2",
+ "euclid",
+ "serde",
+ "terminux-dynamic",
+]
+
+[[package]]
+name = "terminux-mux-server"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "async_ossl",
+ "cc",
+ "clap",
+ "config",
+ "embed-resource",
+ "env-bootstrap",
+ "libc",
+ "log",
+ "mlua",
+ "mux",
+ "openssl",
+ "portable-pty",
+ "promise",
+ "terminux-blob-leases",
+ "terminux-gui-subcommands",
+ "terminux-mux-server-impl",
+ "terminux-term",
+ "umask",
+ "winapi",
+]
+
+[[package]]
+name = "terminux-mux-server-impl"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "async-io",
+ "async_ossl",
+ "codec",
+ "config",
+ "dns-lookup",
+ "futures",
+ "hostname",
+ "lazy_static",
+ "libc",
+ "log",
+ "mux",
+ "portable-pty",
+ "promise",
+ "rangeset",
+ "rcgen",
+ "smol",
+ "terminux-client",
+ "terminux-term",
+ "terminux-uds",
+ "termwiz",
+ "url",
+ "winapi",
+]
+
+[[package]]
+name = "terminux-open-url"
+version = "0.1.0"
+dependencies = [
+ "winapi",
+]
+
+[[package]]
+name = "terminux-ssh"
+version = "0.4.0"
+dependencies = [
+ "anyhow",
+ "assert_fs",
+ "async_ossl",
+ "base64 0.22.1",
+ "bitflags 1.3.2",
+ "camino",
+ "clap",
+ "dirs-next",
+ "env_logger 0.11.10",
+ "filedescriptor",
+ "filenamegen",
+ "gethostname",
+ "hex",
+ "k9",
+ "libc",
+ "libssh-rs",
+ "log",
+ "passfd",
+ "portable-pty",
+ "predicates",
+ "regex",
+ "rstest",
+ "sha2",
+ "shell-words",
+ "smol",
+ "socket2 0.5.10",
+ "ssh2",
+ "terminux-uds",
+ "termwiz",
+ "thiserror 1.0.69",
+ "whoami",
+]
+
+[[package]]
+name = "terminux-surface"
+version = "0.1.0"
+dependencies = [
+ "bitflags 2.11.1",
+ "fancy-regex",
+ "finl_unicode",
+ "fixedbitset",
+ "k9",
+ "ordered-float 4.6.0",
+ "serde",
+ "siphasher",
+ "terminux-bidi",
+ "terminux-blob-leases",
+ "terminux-cell",
+ "terminux-char-props",
+ "terminux-color-types",
+ "terminux-dynamic",
+ "terminux-escape-parser",
+ "terminux-input-types",
+ "unicode-segmentation",
+]
+
+[[package]]
+name = "terminux-term"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "bitflags 1.3.2",
+ "csscolorparser",
+ "downcast-rs",
+ "env_logger 0.11.10",
+ "finl_unicode",
+ "hex",
+ "humansize",
+ "image",
+ "k9",
+ "lazy_static",
+ "log",
+ "lru",
+ "miniz_oxide 0.7.4",
+ "num-traits",
+ "ordered-float 4.6.0",
+ "serde",
+ "terminfo",
+ "terminux-bidi",
+ "terminux-cell",
+ "terminux-dynamic",
+ "terminux-escape-parser",
+ "terminux-surface",
+ "termwiz",
+ "unicode-normalization",
+ "url",
+]
+
+[[package]]
+name = "terminux-toast-notification"
+version = "0.1.0"
+dependencies = [
+ "async-io",
+ "block2",
+ "futures-util",
+ "log",
+ "objc2",
+ "objc2-foundation",
+ "objc2-user-notifications",
+ "serde",
+ "terminux-open-url",
+ "uuid",
+ "windows 0.33.0",
+ "xml-rs",
+ "zbus",
+ "zvariant",
+]
+
+[[package]]
+name = "terminux-uds"
+version = "0.1.0"
+dependencies = [
+ "async-io",
+ "uds_windows",
+]
+
+[[package]]
+name = "terminux-version"
+version = "0.1.0"
+dependencies = [
+ "git2",
+]
+
+[[package]]
 name = "termios"
 version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -5863,20 +6394,20 @@ dependencies = [
  "signal-hook",
  "siphasher",
  "terminfo",
+ "terminux-bidi",
+ "terminux-blob-leases",
+ "terminux-cell",
+ "terminux-char-props",
+ "terminux-color-types",
+ "terminux-dynamic",
+ "terminux-escape-parser",
+ "terminux-input-types",
+ "terminux-surface",
  "termios",
  "thiserror 1.0.69",
  "ucd-trie",
  "unicode-segmentation",
  "vtparse",
- "wezterm-bidi",
- "wezterm-blob-leases",
- "wezterm-cell",
- "wezterm-char-props",
- "wezterm-color-types",
- "wezterm-dynamic",
- "wezterm-escape-parser",
- "wezterm-input-types",
- "wezterm-surface",
  "winapi",
 ]
 
@@ -5890,9 +6421,9 @@ dependencies = [
  "lazy_static",
  "luahelper",
  "terminfo",
+ "terminux-dynamic",
+ "terminux-input-types",
  "termwiz",
- "wezterm-dynamic",
- "wezterm-input-types",
 ]
 
 [[package]]
@@ -5999,7 +6530,7 @@ dependencies = [
  "promise",
  "smol",
  "spa",
- "wezterm-dynamic",
+ "terminux-dynamic",
 ]
 
 [[package]]
@@ -6418,8 +6949,8 @@ dependencies = [
  "config",
  "luahelper",
  "percent-encoding",
+ "terminux-dynamic",
  "url",
- "wezterm-dynamic",
 ]
 
 [[package]]
@@ -6784,537 +7315,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a28ac98ddc8b9274cb41bb4d9d4d5c425b6020c50c46f25559911905610b4a88"
 
 [[package]]
-name = "wezterm"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "cc",
- "chrono",
- "clap",
- "clap_complete",
- "clap_complete_fig",
- "codec",
- "config",
- "embed-resource",
- "env-bootstrap",
- "filedescriptor",
- "hostname",
- "humantime",
- "image",
- "libc",
- "log",
- "mux",
- "portable-pty",
- "promise",
- "serde",
- "serde_json",
- "shell-words",
- "smol",
- "tabout",
- "tempfile",
- "termios",
- "termwiz",
- "termwiz-funcs",
- "textwrap",
- "umask",
- "url",
- "wezterm-client",
- "wezterm-gui-subcommands",
- "wezterm-term",
- "winapi",
-]
-
-[[package]]
-name = "wezterm-bidi"
-version = "0.2.3"
-dependencies = [
- "env_logger 0.11.10",
- "k9",
- "log",
- "wezterm-dynamic",
-]
-
-[[package]]
-name = "wezterm-blob-leases"
-version = "0.1.1"
-dependencies = [
- "getrandom 0.3.4",
- "serde",
- "sha2",
- "tempfile",
- "thiserror 1.0.69",
- "uuid",
-]
-
-[[package]]
-name = "wezterm-cell"
-version = "0.1.0"
-dependencies = [
- "finl_unicode",
- "image",
- "log",
- "ordered-float 4.6.0",
- "serde",
- "sha2",
- "thiserror 1.0.69",
- "wezterm-blob-leases",
- "wezterm-char-props",
- "wezterm-color-types",
- "wezterm-dynamic",
- "wezterm-escape-parser",
-]
-
-[[package]]
-name = "wezterm-char-props"
-version = "0.1.3"
-dependencies = [
- "k9",
- "phf",
- "serde",
- "ucd-trie",
-]
-
-[[package]]
-name = "wezterm-client"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "async-io",
- "async-trait",
- "async_ossl",
- "codec",
- "config",
- "filedescriptor",
- "futures",
- "lazy_static",
- "libc",
- "log",
- "lru",
- "metrics",
- "mux",
- "openssl",
- "parking_lot",
- "portable-pty",
- "promise",
- "rangeset",
- "ratelim",
- "smol",
- "termwiz",
- "textwrap",
- "thiserror 1.0.69",
- "umask",
- "url",
- "wezterm-dynamic",
- "wezterm-ssh",
- "wezterm-term",
- "wezterm-uds",
- "winapi",
-]
-
-[[package]]
-name = "wezterm-color-types"
-version = "0.3.0"
-dependencies = [
- "csscolorparser",
- "deltae",
- "num-traits",
- "serde",
- "wezterm-dynamic",
-]
-
-[[package]]
-name = "wezterm-config-derive"
-version = "0.1.0"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 1.0.109",
-]
-
-[[package]]
-name = "wezterm-dynamic"
-version = "0.2.1"
-dependencies = [
- "log",
- "maplit",
- "ordered-float 4.6.0",
- "strsim",
- "thiserror 2.0.18",
- "wezterm-dynamic-derive",
-]
-
-[[package]]
-name = "wezterm-dynamic-derive"
-version = "0.1.1"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 1.0.109",
-]
-
-[[package]]
-name = "wezterm-escape-parser"
-version = "0.1.0"
-dependencies = [
- "base64 0.22.1",
- "bitflags 2.11.1",
- "criterion",
- "env_logger 0.11.10",
- "hex",
- "image",
- "k9",
- "log",
- "nix",
- "num-derive",
- "num-traits",
- "ordered-float 4.6.0",
- "pest",
- "pest_derive",
- "serde",
- "sha2",
- "thiserror 2.0.18",
- "vtparse",
- "wezterm-blob-leases",
- "wezterm-color-types",
- "wezterm-dynamic",
- "wezterm-input-types",
- "winapi",
-]
-
-[[package]]
-name = "wezterm-font"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "cairo-rs",
- "cocoa",
- "config",
- "core-foundation 0.10.0",
- "core-text",
- "dwrote",
- "encoding_rs",
- "enum-display-derive",
- "env_logger 0.11.10",
- "euclid",
- "finl_unicode",
- "fontconfig",
- "freetype",
- "harfbuzz",
- "image",
- "k9",
- "lazy_static",
- "lfucache",
- "log",
- "memmap2 0.9.10",
- "metrics",
- "objc",
- "ordered-float 4.6.0",
- "rangeset",
- "termwiz",
- "thiserror 1.0.69",
- "walkdir",
- "wezterm-bidi",
- "wezterm-color-types",
- "wezterm-input-types",
- "wezterm-term",
- "wezterm-toast-notification",
- "winapi",
-]
-
-[[package]]
-name = "wezterm-gui"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "benchmarking",
- "bitflags 1.3.2",
- "bytemuck",
- "cc",
- "chrono",
- "clap",
- "codec",
- "colorgrad",
- "config",
- "dhat",
- "dirs-next",
- "downcast-rs",
- "embed-resource",
- "emojis",
- "env-bootstrap",
- "env_logger 0.11.10",
- "euclid",
- "fastrand",
- "filedescriptor",
- "finl_unicode",
- "frecency",
- "futures",
- "hdrhistogram",
- "http_req",
- "image",
- "k9",
- "lazy_static",
- "lfucache",
- "libc",
- "log",
- "luahelper",
- "metrics",
- "mlua",
- "mux",
- "mux-lua",
- "nucleo-matcher",
- "ordered-float 4.6.0",
- "parking_lot",
- "portable-pty",
- "promise",
- "rangeset",
- "ratelim",
- "rayon",
- "regex",
- "serde",
- "serde_json",
- "shared_library",
- "shlex 1.3.0",
- "smol",
- "tabout",
- "tempfile",
- "terminfo",
- "termwiz",
- "termwiz-funcs",
- "textwrap",
- "thiserror 1.0.69",
- "tiny-skia",
- "umask",
- "unicode-normalization",
- "unicode-segmentation",
- "url",
- "url-funcs",
- "walkdir",
- "wezterm-bidi",
- "wezterm-blob-leases",
- "wezterm-client",
- "wezterm-dynamic",
- "wezterm-font",
- "wezterm-gui-subcommands",
- "wezterm-mux-server-impl",
- "wezterm-open-url",
- "wezterm-ssh",
- "wezterm-term",
- "wezterm-toast-notification",
- "wgpu",
- "winapi",
- "window",
- "window-funcs",
- "windows 0.33.0",
-]
-
-[[package]]
-name = "wezterm-gui-subcommands"
-version = "0.1.0"
-dependencies = [
- "clap",
- "config",
-]
-
-[[package]]
-name = "wezterm-input-types"
-version = "0.1.0"
-dependencies = [
- "bitflags 1.3.2",
- "euclid",
- "serde",
- "wezterm-dynamic",
-]
-
-[[package]]
-name = "wezterm-mux-server"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "async_ossl",
- "cc",
- "clap",
- "config",
- "embed-resource",
- "env-bootstrap",
- "libc",
- "log",
- "mlua",
- "mux",
- "openssl",
- "portable-pty",
- "promise",
- "umask",
- "wezterm-blob-leases",
- "wezterm-gui-subcommands",
- "wezterm-mux-server-impl",
- "wezterm-term",
- "winapi",
-]
-
-[[package]]
-name = "wezterm-mux-server-impl"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "async-io",
- "async_ossl",
- "codec",
- "config",
- "dns-lookup",
- "futures",
- "hostname",
- "lazy_static",
- "libc",
- "log",
- "mux",
- "portable-pty",
- "promise",
- "rangeset",
- "rcgen",
- "smol",
- "termwiz",
- "url",
- "wezterm-client",
- "wezterm-term",
- "wezterm-uds",
- "winapi",
-]
-
-[[package]]
-name = "wezterm-open-url"
-version = "0.1.0"
-dependencies = [
- "winapi",
-]
-
-[[package]]
-name = "wezterm-ssh"
-version = "0.4.0"
-dependencies = [
- "anyhow",
- "assert_fs",
- "async_ossl",
- "base64 0.22.1",
- "bitflags 1.3.2",
- "camino",
- "clap",
- "dirs-next",
- "env_logger 0.11.10",
- "filedescriptor",
- "filenamegen",
- "gethostname",
- "hex",
- "k9",
- "libc",
- "libssh-rs",
- "log",
- "passfd",
- "portable-pty",
- "predicates",
- "regex",
- "rstest",
- "sha2",
- "shell-words",
- "smol",
- "socket2 0.5.10",
- "ssh2",
- "termwiz",
- "thiserror 1.0.69",
- "wezterm-uds",
- "whoami",
-]
-
-[[package]]
-name = "wezterm-surface"
-version = "0.1.0"
-dependencies = [
- "bitflags 2.11.1",
- "fancy-regex",
- "finl_unicode",
- "fixedbitset",
- "k9",
- "ordered-float 4.6.0",
- "serde",
- "siphasher",
- "unicode-segmentation",
- "wezterm-bidi",
- "wezterm-blob-leases",
- "wezterm-cell",
- "wezterm-char-props",
- "wezterm-color-types",
- "wezterm-dynamic",
- "wezterm-escape-parser",
- "wezterm-input-types",
-]
-
-[[package]]
-name = "wezterm-term"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "bitflags 1.3.2",
- "csscolorparser",
- "downcast-rs",
- "env_logger 0.11.10",
- "finl_unicode",
- "hex",
- "humansize",
- "image",
- "k9",
- "lazy_static",
- "log",
- "lru",
- "miniz_oxide 0.7.4",
- "num-traits",
- "ordered-float 4.6.0",
- "serde",
- "terminfo",
- "termwiz",
- "unicode-normalization",
- "url",
- "wezterm-bidi",
- "wezterm-cell",
- "wezterm-dynamic",
- "wezterm-escape-parser",
- "wezterm-surface",
-]
-
-[[package]]
-name = "wezterm-toast-notification"
-version = "0.1.0"
-dependencies = [
- "async-io",
- "block2",
- "futures-util",
- "log",
- "objc2",
- "objc2-foundation",
- "objc2-user-notifications",
- "serde",
- "uuid",
- "wezterm-open-url",
- "windows 0.33.0",
- "xml-rs",
- "zbus",
- "zvariant",
-]
-
-[[package]]
-name = "wezterm-uds"
-version = "0.1.0"
-dependencies = [
- "async-io",
- "uds_windows",
-]
-
-[[package]]
-name = "wezterm-version"
-version = "0.1.0"
-dependencies = [
- "git2",
-]
-
-[[package]]
 name = "wgpu"
 version = "25.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -7559,6 +7559,10 @@ dependencies = [
  "shared_library",
  "shlex 1.3.0",
  "smithay-client-toolkit",
+ "terminux-bidi",
+ "terminux-color-types",
+ "terminux-font",
+ "terminux-input-types",
  "thiserror 1.0.69",
  "tiny-skia",
  "url",
@@ -7567,10 +7571,6 @@ dependencies = [
  "wayland-egl",
  "wayland-protocols",
  "wayland-protocols-plasma",
- "wezterm-bidi",
- "wezterm-color-types",
- "wezterm-font",
- "wezterm-input-types",
  "winapi",
  "windows 0.33.0",
  "winreg",
@@ -7589,7 +7589,7 @@ dependencies = [
  "anyhow",
  "config",
  "luahelper",
- "wezterm-dynamic",
+ "terminux-dynamic",
  "window",
 ]
 

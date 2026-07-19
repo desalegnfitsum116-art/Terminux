@@ -26,7 +26,7 @@ use crate::termwindow::render::{
     LineToElementShapeItem,
 };
 use crate::termwindow::webgpu::WebGpuState;
-use ::wezterm_term::input::{ClickPosition, MouseButton as TMB};
+use ::terminux_term::input::{ClickPosition, MouseButton as TMB};
 use ::window::*;
 use anyhow::{anyhow, ensure, Context};
 use config::keyassignment::{
@@ -62,11 +62,11 @@ use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
 use termwiz::hyperlink::Hyperlink;
 use termwiz::surface::SequenceNo;
-use wezterm_dynamic::Value;
-use wezterm_font::FontConfiguration;
-use wezterm_term::color::ColorPalette;
-use wezterm_term::input::LastMouseClick;
-use wezterm_term::{Alert, Progress, StableRowIndex, TerminalConfiguration, TerminalSize};
+use terminux_dynamic::Value;
+use terminux_font::FontConfiguration;
+use terminux_term::color::ColorPalette;
+use terminux_term::input::LastMouseClick;
+use terminux_term::{Alert, Progress, StableRowIndex, TerminalConfiguration, TerminalSize};
 
 pub mod background;
 pub mod box_model;
@@ -89,7 +89,7 @@ use prevcursor::PrevCursorPos;
 const ATLAS_SIZE: usize = 128;
 
 lazy_static::lazy_static! {
-    static ref WINDOW_CLASS: Mutex<String> = Mutex::new(wezterm_gui_subcommands::DEFAULT_WINDOW_CLASS.to_owned());
+    static ref WINDOW_CLASS: Mutex<String> = Mutex::new(terminux_gui_subcommands::DEFAULT_WINDOW_CLASS.to_owned());
     static ref POSITION: Mutex<Option<GuiPosition>> = Mutex::new(None);
 }
 
@@ -134,8 +134,8 @@ pub enum TermWindowNotif {
         name: String,
         again: bool,
     },
-    GetConfigOverrides(Sender<wezterm_dynamic::Value>),
-    SetConfigOverrides(wezterm_dynamic::Value),
+    GetConfigOverrides(Sender<terminux_dynamic::Value>),
+    SetConfigOverrides(terminux_dynamic::Value),
     CancelOverlayForPane(PaneId),
     CancelOverlayForTab {
         tab_id: TabId,
@@ -365,7 +365,7 @@ enum EventState {
 pub struct TermWindow {
     pub window: Option<Window>,
     pub config: ConfigHandle,
-    pub config_overrides: wezterm_dynamic::Value,
+    pub config_overrides: terminux_dynamic::Value,
     os_parameters: Option<parameters::Parameters>,
     /// When we most recently received keyboard focus
     pub focused: Option<Instant>,
@@ -567,7 +567,7 @@ impl TermWindow {
                 log::debug!(
                     "OpenGL initialized! {} wezterm version: {}",
                     render_info,
-                    config::wezterm_version(),
+                    config::terminux_version(),
                 );
                 self.render_state.replace(render_state);
             }
@@ -694,7 +694,7 @@ impl TermWindow {
             window: None,
             window_background,
             config: config.clone(),
-            config_overrides: wezterm_dynamic::Value::default(),
+            config_overrides: terminux_dynamic::Value::default(),
             palette: None,
             focused: None,
             mux_window_id,
@@ -2384,6 +2384,48 @@ impl TermWindow {
         self.show_launcher_impl(args, active_tab_idx);
     }
 
+    fn find_dashboard_script() -> Option<std::path::PathBuf> {
+        // Look relative to the executable
+        if let Ok(exe) = std::env::current_exe() {
+            if let Some(exe_dir) = exe.parent() {
+                // Development: ../../terminux/scripts/dashboard.sh
+                let dev_path = exe_dir.join("../../terminux/scripts/dashboard.sh");
+                if dev_path.exists() {
+                    return Some(dev_path);
+                }
+                // Installed: ../share/terminux/scripts/dashboard.sh
+                let install_path = exe_dir.join("../share/terminux/scripts/dashboard.sh");
+                if install_path.exists() {
+                    return Some(install_path);
+                }
+            }
+        }
+        // Check common locations
+        for p in &[
+            "/usr/local/share/terminux/scripts/dashboard.sh",
+            "/usr/share/terminux/scripts/dashboard.sh",
+        ] {
+            let path = std::path::PathBuf::from(p);
+            if path.exists() {
+                return Some(path);
+            }
+        }
+        // XDG data
+        if let Ok(data) = std::env::var("XDG_DATA_HOME") {
+            let path = std::path::PathBuf::from(data).join("terminux/scripts/dashboard.sh");
+            if path.exists() {
+                return Some(path);
+            }
+        }
+        if let Ok(home) = std::env::var("HOME") {
+            let path = std::path::PathBuf::from(home).join(".local/share/terminux/scripts/dashboard.sh");
+            if path.exists() {
+                return Some(path);
+            }
+        }
+        None
+    }
+
     fn show_launcher(&mut self) {
         let title = "Launcher".to_string();
         let args = LauncherActionArgs {
@@ -2479,7 +2521,7 @@ impl TermWindow {
             let mut zones: Vec<StableRowIndex> = zones
                 .into_iter()
                 .filter_map(|zone| {
-                    if zone.semantic_type == wezterm_term::SemanticType::Prompt {
+                    if zone.semantic_type == terminux_term::SemanticType::Prompt {
                         Some(zone.start_y)
                     } else {
                         None
@@ -3153,7 +3195,19 @@ impl TermWindow {
                 )]);
             }
             OpenUri(link) => {
-                wezterm_open_url::open_url(link);
+                terminux_open_url::open_url(link);
+            }
+            ShowDashboard => {
+                let script = Self::find_dashboard_script();
+                let mut cmd = SpawnCommand::default();
+                if let Some(script_path) = script {
+                    cmd.args = Some(vec![
+                        "bash".to_string(),
+                        script_path.to_string_lossy().to_string(),
+                    ]);
+                    cmd.label = Some("Terminux Dashboard".to_string());
+                }
+                self.spawn_command(&cmd, SpawnWhere::NewTab);
             }
             ActivateCommandPalette => {
                 let modal = crate::termwindow::palette::CommandPalette::new(self);
@@ -3198,7 +3252,7 @@ impl TermWindow {
                 };
                 if default_click {
                     log::info!("clicking {}", link);
-                    wezterm_open_url::open_url(&link);
+                    terminux_open_url::open_url(&link);
                 }
                 Ok(())
             }

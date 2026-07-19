@@ -39,14 +39,14 @@ use std::sync::atomic::Ordering;
 use std::time::Duration;
 use termwiz::hyperlink;
 use termwiz::surface::CursorShape;
-use wezterm_bidi::ParagraphDirectionHint;
-use wezterm_config_derive::ConfigMeta;
-use wezterm_dynamic::{FromDynamic, ToDynamic};
-use wezterm_input_types::{
+use terminux_bidi::ParagraphDirectionHint;
+use terminux_config_derive::ConfigMeta;
+use terminux_dynamic::{FromDynamic, ToDynamic};
+use terminux_input_types::{
     IntegratedTitleButton, IntegratedTitleButtonAlignment, IntegratedTitleButtonStyle, Modifiers,
     UIKeyCapRendering, WindowDecorations,
 };
-use wezterm_term::TerminalSize;
+use terminux_term::TerminalSize;
 
 #[derive(Debug, Clone, FromDynamic, ToDynamic, ConfigMeta)]
 pub struct Config {
@@ -920,7 +920,7 @@ impl Default for Config {
         // specified in the struct so that we don't have to repeat
         // the same thing in a different form down here
         Config::from_dynamic(
-            &wezterm_dynamic::Value::Object(Default::default()),
+            &terminux_dynamic::Value::Object(Default::default()),
             Default::default(),
         )
         .unwrap()
@@ -929,7 +929,7 @@ impl Default for Config {
 
 impl Config {
     pub fn load() -> LoadedConfig {
-        Self::load_with_overrides(&wezterm_dynamic::Value::default())
+        Self::load_with_overrides(&terminux_dynamic::Value::default())
     }
 
     /// It is relatively expensive to parse all the ssh config files,
@@ -1013,15 +1013,15 @@ impl Config {
         Ok(())
     }
 
-    pub fn load_with_overrides(overrides: &wezterm_dynamic::Value) -> LoadedConfig {
+    pub fn load_with_overrides(overrides: &terminux_dynamic::Value) -> LoadedConfig {
         // Note that the directories crate has methods for locating project
         // specific config directories, but only returns one of them, not
         // multiple.  In addition, it spawns a lot of subprocesses,
         // so we do this bit "by-hand"
 
-        let mut paths = vec![PathPossibility::optional(HOME_DIR.join(".wezterm.lua"))];
+        let mut paths = vec![PathPossibility::optional(HOME_DIR.join(".terminux.lua"))];
         for dir in CONFIG_DIRS.iter() {
-            paths.push(PathPossibility::optional(dir.join("wezterm.lua")))
+            paths.push(PathPossibility::optional(dir.join("terminux.lua")))
         }
 
         if cfg!(windows) {
@@ -1035,12 +1035,12 @@ impl Config {
             // dir as the executable that will take precedence.
             if let Ok(exe_name) = std::env::current_exe() {
                 if let Some(exe_dir) = exe_name.parent() {
-                    paths.insert(0, PathPossibility::optional(exe_dir.join("wezterm.lua")));
+                    paths.insert(0, PathPossibility::optional(exe_dir.join("terminux.lua")));
                 }
             }
         }
-        if let Some(path) = std::env::var_os("WEZTERM_CONFIG_FILE") {
-            log::trace!("Note: WEZTERM_CONFIG_FILE is set in the environment");
+        if let Some(path) = std::env::var_os("TERMINUX_CONFIG_FILE") {
+            log::trace!("Note: TERMINUX_CONFIG_FILE is set in the environment");
             paths.insert(0, PathPossibility::required(path.into()));
         }
 
@@ -1068,11 +1068,11 @@ impl Config {
             }
         }
 
-        // We didn't find (or were asked to skip) a wezterm.lua file, so
+        // We didn't find (or were asked to skip) a terminux.lua file, so
         // update the environment to make it simpler to understand this
         // state.
-        std::env::remove_var("WEZTERM_CONFIG_FILE");
-        std::env::remove_var("WEZTERM_CONFIG_DIR");
+        std::env::remove_var("TERMINUX_CONFIG_FILE");
+        std::env::remove_var("TERMINUX_CONFIG_DIR");
 
         match Self::try_default() {
             Err(err) => LoadedConfig {
@@ -1087,7 +1087,7 @@ impl Config {
 
     pub fn try_default() -> anyhow::Result<LoadedConfig> {
         let (config, warnings) =
-            wezterm_dynamic::Error::capture_warnings(|| -> anyhow::Result<Config> {
+            terminux_dynamic::Error::capture_warnings(|| -> anyhow::Result<Config> {
                 Ok(default_config_with_overrides_applied()?.compute_extra_defaults(None))
             });
 
@@ -1101,7 +1101,7 @@ impl Config {
 
     fn try_load(
         path_item: &PathPossibility,
-        overrides: &wezterm_dynamic::Value,
+        overrides: &terminux_dynamic::Value,
     ) -> anyhow::Result<Option<LoadedConfig>> {
         let p = path_item.path.as_path();
         log::trace!("consider config: {}", p.display());
@@ -1118,7 +1118,7 @@ impl Config {
         let lua = make_lua_context(p)?;
 
         let (config, warnings) =
-            wezterm_dynamic::Error::capture_warnings(|| -> anyhow::Result<Config> {
+            terminux_dynamic::Error::capture_warnings(|| -> anyhow::Result<Config> {
                 let cfg: Config;
 
                 let config: mlua::Value = smol::block_on(
@@ -1143,9 +1143,9 @@ impl Config {
                 // problems earlier than we use them.
                 let _ = cfg.key_bindings();
 
-                std::env::set_var("WEZTERM_CONFIG_FILE", p);
+                std::env::set_var("TERMINUX_CONFIG_FILE", p);
                 if let Some(dir) = p.parent() {
-                    std::env::set_var("WEZTERM_CONFIG_DIR", dir);
+                    std::env::set_var("TERMINUX_CONFIG_DIR", dir);
                 }
                 Ok(cfg)
             });
@@ -1162,7 +1162,7 @@ impl Config {
     pub(crate) fn apply_overrides_obj_to<'l>(
         lua: &'l mlua::Lua,
         mut config: mlua::Value<'l>,
-        overrides: &wezterm_dynamic::Value,
+        overrides: &terminux_dynamic::Value,
     ) -> anyhow::Result<mlua::Value<'l>> {
         // config may be a table, or it may be a config builder.
         // We'll leave it up to lua to call the appropriate
@@ -1179,7 +1179,7 @@ impl Config {
             .eval()?;
 
         match overrides {
-            wezterm_dynamic::Value::Object(obj) => {
+            terminux_dynamic::Value::Object(obj) => {
                 for (key, value) in obj {
                     let key = luahelper::dynamic_to_lua_value(lua, key.clone())?;
                     let value = luahelper::dynamic_to_lua_value(lua, value.clone())?;
@@ -1209,7 +1209,7 @@ impl Config {
             let literal = value.escape_debug();
             let code = format!(
                 r#"
-                local wezterm = require 'wezterm';
+                local terminux = require 'terminux';
                 local value = {value};
                 if value == nil then
                     error("{literal} evaluated as nil. Check for missing quotes or other syntax issues")
@@ -1357,38 +1357,43 @@ impl Config {
 
         cfg.font_rules.push(StyleRule {
             italic: Some(true),
-            intensity: Some(wezterm_term::Intensity::Half),
+            intensity: Some(terminux_term::Intensity::Half),
             font: half_bright_italic,
             ..Default::default()
         });
 
         cfg.font_rules.push(StyleRule {
             italic: Some(false),
-            intensity: Some(wezterm_term::Intensity::Half),
+            intensity: Some(terminux_term::Intensity::Half),
             font: half_bright,
             ..Default::default()
         });
 
         cfg.font_rules.push(StyleRule {
             italic: Some(false),
-            intensity: Some(wezterm_term::Intensity::Bold),
+            intensity: Some(terminux_term::Intensity::Bold),
             font: bold,
             ..Default::default()
         });
 
         cfg.font_rules.push(StyleRule {
             italic: Some(true),
-            intensity: Some(wezterm_term::Intensity::Bold),
+            intensity: Some(terminux_term::Intensity::Bold),
             font: bold_italic,
             ..Default::default()
         });
 
         cfg.font_rules.push(StyleRule {
             italic: Some(true),
-            intensity: Some(wezterm_term::Intensity::Normal),
+            intensity: Some(terminux_term::Intensity::Normal),
             font: italic,
             ..Default::default()
         });
+
+        // Set default color scheme to Terminux Dark if none specified
+        if cfg.color_scheme.is_none() {
+            cfg.color_scheme = Some("Terminux Dark".to_string());
+        }
 
         // Load any additional color schemes into the color_schemes map
         cfg.load_color_schemes(&cfg.compute_color_scheme_dirs())
@@ -1612,8 +1617,8 @@ impl Config {
         cmd.env("COLORTERM", "truecolor");
         // TERM_PROGRAM and TERM_PROGRAM_VERSION are an emerging
         // de-facto standard for identifying the terminal.
-        cmd.env("TERM_PROGRAM", "WezTerm");
-        cmd.env("TERM_PROGRAM_VERSION", crate::wezterm_version());
+        cmd.env("TERM_PROGRAM", "Terminux");
+        cmd.env("TERM_PROGRAM_VERSION", crate::terminux_version());
     }
 }
 
@@ -1752,26 +1757,26 @@ fn default_font_size() -> f64 {
 
 pub(crate) fn compute_cache_dir() -> anyhow::Result<PathBuf> {
     if let Some(runtime) = dirs_next::cache_dir() {
-        return Ok(runtime.join("wezterm"));
+        return Ok(runtime.join("terminux"));
     }
 
-    Ok(crate::HOME_DIR.join(".local/share/wezterm"))
+    Ok(crate::HOME_DIR.join(".local/share/terminux"))
 }
 
 pub(crate) fn compute_data_dir() -> anyhow::Result<PathBuf> {
     if let Some(runtime) = dirs_next::data_dir() {
-        return Ok(runtime.join("wezterm"));
+        return Ok(runtime.join("terminux"));
     }
 
-    Ok(crate::HOME_DIR.join(".local/share/wezterm"))
+    Ok(crate::HOME_DIR.join(".local/share/terminux"))
 }
 
 pub(crate) fn compute_runtime_dir() -> anyhow::Result<PathBuf> {
     if let Some(runtime) = dirs_next::runtime_dir() {
-        return Ok(runtime.join("wezterm"));
+        return Ok(runtime.join("terminux"));
     }
 
-    Ok(crate::HOME_DIR.join(".local/share/wezterm"))
+    Ok(crate::HOME_DIR.join(".local/share/terminux"))
 }
 
 pub fn pki_dir() -> anyhow::Result<PathBuf> {
@@ -2126,15 +2131,15 @@ pub enum BoldBrightening {
 
 impl FromDynamic for BoldBrightening {
     fn from_dynamic(
-        value: &wezterm_dynamic::Value,
-        options: wezterm_dynamic::FromDynamicOptions,
-    ) -> Result<Self, wezterm_dynamic::Error> {
+        value: &terminux_dynamic::Value,
+        options: terminux_dynamic::FromDynamicOptions,
+    ) -> Result<Self, terminux_dynamic::Error> {
         match String::from_dynamic(value, options) {
             Ok(s) => match s.as_str() {
                 "No" => Ok(Self::No),
                 "BrightAndBold" => Ok(Self::BrightAndBold),
                 "BrightOnly" => Ok(Self::BrightOnly),
-                s => Err(wezterm_dynamic::Error::Message(format!(
+                s => Err(terminux_dynamic::Error::Message(format!(
                     "`{s}` is not valid, use one of `No`, `BrightAndBold` or `BrightOnly`"
                 ))),
             },
@@ -2149,7 +2154,7 @@ impl FromDynamic for BoldBrightening {
 
 #[derive(Debug, FromDynamic, ToDynamic, Clone, Copy, PartialEq, Eq, Default)]
 pub enum ImePreeditRendering {
-    /// IME preedit is rendered by WezTerm itself
+    /// IME preedit is rendered by Terminux itself
     #[default]
     Builtin,
     /// IME preedit is rendered by system

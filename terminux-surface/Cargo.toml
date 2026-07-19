@@ -1,12 +1,12 @@
 [package]
 authors = ["Wez Furlong"]
-name = "wezterm-surface"
+name = "terminux-surface"
 version = "0.1.0"
 edition = "2018"
 repository = "https://github.com/wezterm/wezterm"
 description = "Surface and Line types for terminals"
 license = "MIT"
-documentation = "https://docs.rs/wezterm-surface"
+documentation = "https://docs.rs/terminux-surface"
 keywords = ["terminal", "surface", "line"]
 
 [dependencies]
@@ -18,21 +18,21 @@ ordered-float.workspace = true
 serde = {workspace=true, optional=true}
 siphasher.workspace = true
 unicode-segmentation.workspace = true
-wezterm-bidi.workspace = true
-wezterm-blob-leases = {workspace=true, optional=true}
-wezterm-cell = {workspace = true}
-wezterm-char-props.workspace = true
-wezterm-color-types = {workspace = true}
-wezterm-dynamic = {workspace = true}
-wezterm-escape-parser = {workspace = true}
-wezterm-input-types.workspace = true
+terminux-bidi.workspace = true
+terminux-blob-leases = {workspace=true, optional=true}
+terminux-cell = {workspace = true}
+terminux-char-props.workspace = true
+terminux-color-types = {workspace = true}
+terminux-dynamic = {workspace = true}
+terminux-escape-parser = {workspace = true}
+terminux-input-types.workspace = true
 
 [features]
 default = []
-std = ["fancy-regex/std", "wezterm-cell/std", "wezterm-dynamic/std", "wezterm-escape-parser/std", "fixedbitset/std", "fancy-regex/perf", "fancy-regex/unicode"]
+std = ["fancy-regex/std", "terminux-cell/std", "terminux-dynamic/std", "terminux-escape-parser/std", "fixedbitset/std", "fancy-regex/perf", "fancy-regex/unicode"]
 appdata = ["std"]
-use_serde = ["serde"] #, "wezterm-color-types/use_serde", "wezterm-blob-leases/serde", "bitflags/serde", "wezterm-input-types/serde", "wezterm-escape-parser/use_serde", "wezterm-cell/use_serde"]
-use_image = ["wezterm-cell/use_image"] # "image", "dep:image", "wezterm-escape-parser/use_image", "wezterm-escape-parser/kitty-shm", "wezterm-cell/use_image"]
+use_serde = ["serde"] #, "terminux-color-types/use_serde", "terminux-blob-leases/serde", "bitflags/serde", "terminux-input-types/serde", "terminux-escape-parser/use_serde", "terminux-cell/use_serde"]
+use_image = ["terminux-cell/use_image"] # "image", "dep:image", "terminux-escape-parser/use_image", "terminux-escape-parser/kitty-shm", "terminux-cell/use_image"]
 
 [dev-dependencies]
 k9.workspace = true

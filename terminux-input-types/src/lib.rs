@@ -9,7 +9,7 @@ use core::fmt::Write;
 use core::sync::atomic::AtomicBool;
 #[cfg(feature = "std")]
 use std::sync::LazyLock;
-use wezterm_dynamic::{FromDynamic, ToDynamic};
+use terminux_dynamic::{FromDynamic, ToDynamic};
 
 extern crate alloc;
 
@@ -2159,21 +2159,21 @@ impl Default for IntegratedTitleButtonStyle {
 
 impl FromDynamic for IntegratedTitleButtonStyle {
     fn from_dynamic(
-        value: &wezterm_dynamic::Value,
-        _options: wezterm_dynamic::FromDynamicOptions,
-    ) -> Result<Self, wezterm_dynamic::Error>
+        value: &terminux_dynamic::Value,
+        _options: terminux_dynamic::FromDynamicOptions,
+    ) -> Result<Self, terminux_dynamic::Error>
     where
         Self: Sized,
     {
         let type_name = "integrated_title_button_style";
 
-        if let wezterm_dynamic::Value::String(string) = value {
+        if let terminux_dynamic::Value::String(string) = value {
             let style = match string.as_str() {
                 "Windows" => Self::Windows,
                 "Gnome" => Self::Gnome,
                 "MacOsNative" if cfg!(target_os = "macos") => Self::MacOsNative,
                 _ => {
-                    return Err(wezterm_dynamic::Error::InvalidVariantForType {
+                    return Err(terminux_dynamic::Error::InvalidVariantForType {
                         variant_name: string.to_string(),
                         type_name,
                         possible: &["Windows", "Gnome", "MacOsNative"],
@@ -2182,7 +2182,7 @@ impl FromDynamic for IntegratedTitleButtonStyle {
             };
             Ok(style)
         } else {
-            Err(wezterm_dynamic::Error::InvalidVariantForType {
+            Err(terminux_dynamic::Error::InvalidVariantForType {
                 variant_name: value.variant_name().to_string(),
                 type_name,
                 possible: &["String"],

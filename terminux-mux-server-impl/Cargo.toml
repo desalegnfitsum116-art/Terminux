@@ -1,5 +1,5 @@
 [package]
-name = "wezterm-mux-server-impl"
+name = "terminux-mux-server-impl"
 version = "0.1.0"
 authors = ["Wez Furlong <wez@wezfurlong.org>"]
 edition = "2018"
@@ -27,9 +27,9 @@ rcgen.workspace = true
 smol.workspace = true
 termwiz = { workspace=true, features=["use_serde"] }
 url.workspace = true
-wezterm-client.workspace = true
-wezterm-term = { workspace=true, features=["use_serde"] }
-wezterm-uds.workspace = true
+terminux-client.workspace = true
+terminux-term = { workspace=true, features=["use_serde"] }
+terminux-uds.workspace = true
 
 [target."cfg(windows)".dependencies]
 winapi = { workspace=true, features = [ "winuser" ]}

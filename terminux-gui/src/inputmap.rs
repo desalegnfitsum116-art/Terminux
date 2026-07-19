@@ -6,8 +6,8 @@ use config::keyassignment::{
 use config::{ConfigHandle, MouseEventAltScreen, MouseEventTriggerMods};
 use std::collections::{BTreeMap, HashMap};
 use std::time::Duration;
-use wezterm_dynamic::{ToDynamic, Value};
-use wezterm_term::input::MouseButton;
+use terminux_dynamic::{ToDynamic, Value};
+use terminux_term::input::MouseButton;
 use window::{KeyCode, Modifiers, PhysKeyCode, UIKeyCapRendering};
 
 pub struct InputMap {

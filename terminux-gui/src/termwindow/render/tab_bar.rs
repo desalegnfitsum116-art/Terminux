@@ -3,7 +3,7 @@ use crate::termwindow::render::RenderScreenLineParams;
 use crate::utilsprites::RenderMetrics;
 use config::ConfigHandle;
 use mux::renderable::RenderableDimensions;
-use wezterm_term::color::ColorAttribute;
+use terminux_term::color::ColorAttribute;
 use window::color::LinearRgba;
 
 impl crate::TermWindow {
@@ -108,7 +108,7 @@ impl crate::TermWindow {
 
     pub fn tab_bar_pixel_height_impl(
         config: &ConfigHandle,
-        fontconfig: &wezterm_font::FontConfiguration,
+        fontconfig: &terminux_font::FontConfiguration,
         render_metrics: &RenderMetrics,
     ) -> anyhow::Result<f32> {
         if config.use_fancy_tab_bar {

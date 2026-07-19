@@ -11,7 +11,7 @@
 use crate::tmux_cc::Event;
 use core::fmt::{Display, Formatter, Result as FmtResult, Write as FmtWrite};
 use num_derive::*;
-use wezterm_color_types::LinearRgba;
+use terminux_color_types::LinearRgba;
 
 #[cfg_attr(not(feature = "std"), macro_use)]
 extern crate alloc;

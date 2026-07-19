@@ -14,9 +14,9 @@ use std::time::Instant;
 use termwiz::cell::{unicode_column_width, Blink};
 use termwiz::color::LinearRgba;
 use termwiz::surface::CursorShape;
-use wezterm_bidi::Direction;
-use wezterm_term::color::ColorAttribute;
-use wezterm_term::CellAttributes;
+use terminux_bidi::Direction;
+use terminux_term::color::ColorAttribute;
+use terminux_term::CellAttributes;
 
 impl crate::TermWindow {
     /// "Render" a line of the terminal screen into the vertex buffer.

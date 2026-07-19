@@ -7,8 +7,8 @@ use num_derive::*;
 use num_traits::{FromPrimitive, ToPrimitive};
 #[cfg(feature = "use_serde")]
 use serde::{Deserialize, Serialize};
-use wezterm_dynamic::{FromDynamic, ToDynamic};
-use wezterm_input_types::Modifiers;
+use terminux_dynamic::{FromDynamic, ToDynamic};
+use terminux_input_types::Modifiers;
 
 use crate::allocate::*;
 
@@ -154,7 +154,7 @@ fn csi_size() {
     assert_eq!(core::mem::size_of::<CSI>(), 32);
 }
 
-pub use wezterm_input_types::KittyKeyboardFlags;
+pub use terminux_input_types::KittyKeyboardFlags;
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq)]
 #[repr(u16)]

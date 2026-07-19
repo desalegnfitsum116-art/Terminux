@@ -1,4 +1,4 @@
-use wezterm_dynamic::{FromDynamic, ToDynamic};
+use terminux_dynamic::{FromDynamic, ToDynamic};
 
 #[derive(Debug, Default, Clone, ToDynamic, PartialEq, Eq, FromDynamic)]
 pub enum WindowLevel {

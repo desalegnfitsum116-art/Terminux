@@ -1,0 +1,9 @@
+{
+    "name": "hello_terminux",
+    "display_name": "Hello Terminux",
+    "version": "1.0.0",
+    "author": "Terminux Team",
+    "description": "Example plugin demonstrating the Terminux Plugin API",
+    "entry": "plugin.lua",
+    "min_terminux_version": "1.0.0"
+}

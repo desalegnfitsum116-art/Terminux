@@ -2,13 +2,13 @@ use crate::cli::activate_pane_direction::PaneDirectionParser;
 use clap::Parser;
 use config::keyassignment::PaneDirection;
 use mux::pane::PaneId;
-use wezterm_client::client::Client;
+use terminux_client::client::Client;
 
 #[derive(Debug, Parser, Clone)]
 pub struct GetPaneDirection {
     /// Specify the current pane.
     /// The default is to use the current pane based on the
-    /// environment variable WEZTERM_PANE.
+    /// environment variable TERMINUX_PANE.
     #[arg(long)]
     pane_id: Option<PaneId>,
 

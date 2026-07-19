@@ -470,7 +470,7 @@ impl UserData for Value {
 }
 
 pub fn register(lua: &Lua) -> anyhow::Result<()> {
-    let wezterm_mod = get_or_create_module(lua, "wezterm")?;
-    wezterm_mod.set("GLOBAL", GLOBALS.clone())?;
+    let terminux_mod = get_or_create_module(lua, "wezterm")?;
+    terminux_mod.set("GLOBAL", GLOBALS.clone())?;
     Ok(())
 }

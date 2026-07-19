@@ -6,7 +6,7 @@ use config::DimensionContext;
 use std::ops::Range;
 use termwiz::surface::CursorShape;
 use tiny_skia::{BlendMode, FillRule, Paint, Path, PathBuilder, PixmapMut, Stroke, Transform};
-use wezterm_font::units::{IntPixelLength, PixelLength};
+use terminux_font::units::{IntPixelLength, PixelLength};
 use window::{BitmapImage, Image, Point, Rect, Size};
 
 #[derive(Copy, Clone, Eq, PartialEq)]

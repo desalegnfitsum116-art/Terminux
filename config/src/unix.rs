@@ -1,7 +1,7 @@
 use crate::config::validate_domain_name;
 use crate::*;
 use std::path::PathBuf;
-use wezterm_dynamic::{FromDynamic, ToDynamic};
+use terminux_dynamic::{FromDynamic, ToDynamic};
 
 /// Configures an instance of a multiplexer that can be communicated
 /// with via a unix domain socket

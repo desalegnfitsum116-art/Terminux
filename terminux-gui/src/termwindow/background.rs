@@ -14,7 +14,7 @@ use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 use std::time::SystemTime;
 use termwiz::image::{ImageData, ImageDataType};
-use wezterm_term::StableRowIndex;
+use terminux_term::StableRowIndex;
 
 lazy_static::lazy_static! {
     static ref IMAGE_CACHE: Mutex<HashMap<String, CachedImage>> = Mutex::new(HashMap::new());

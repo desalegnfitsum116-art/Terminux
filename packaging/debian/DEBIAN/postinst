@@ -1,0 +1,24 @@
+#!/bin/sh
+set -e
+
+# Terminux post-installation script
+
+APP_DIR="/usr/share/applications"
+ICON_DIR="/usr/share/icons/hicolor"
+
+# Update desktop database
+if command -v update-desktop-database >/dev/null 2>&1; then
+    update-desktop-database "$APP_DIR" || true
+fi
+
+# Update icon cache
+if command -v gtk-update-icon-cache >/dev/null 2>&1; then
+    gtk-update-icon-cache -f -t "$ICON_DIR" || true
+fi
+
+# Set as default terminal if x-terminal-emulator alternative exists
+if command -v update-alternatives >/dev/null 2>&1; then
+    update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/bin/terminux 50 || true
+fi
+
+exit 0

@@ -3,7 +3,7 @@ use crate::TermWindow;
 use config::keyassignment::KeyAssignment;
 use downcast_rs::{impl_downcast, Downcast};
 use std::cell::Ref;
-use wezterm_term::{KeyCode, KeyModifiers, MouseEvent};
+use terminux_term::{KeyCode, KeyModifiers, MouseEvent};
 
 pub trait Modal: Downcast {
     fn perform_assignment(

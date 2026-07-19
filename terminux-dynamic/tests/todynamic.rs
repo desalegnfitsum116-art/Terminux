@@ -1,6 +1,6 @@
 use maplit::btreemap;
 use ordered_float::OrderedFloat;
-use wezterm_dynamic::{ToDynamic, Value};
+use terminux_dynamic::{ToDynamic, Value};
 
 #[test]
 fn intrinsics() {

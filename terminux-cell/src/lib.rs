@@ -9,11 +9,11 @@ use core::mem;
 use finl_unicode::grapheme_clusters::Graphemes;
 #[cfg(feature = "use_serde")]
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
-pub use wezterm_char_props::emoji::Presentation;
-use wezterm_char_props::emoji_variation::WCWIDTH_TABLE;
-use wezterm_char_props::widechar_width::WcWidth;
-use wezterm_dynamic::{FromDynamic, ToDynamic};
-pub use wezterm_escape_parser::osc::Hyperlink;
+pub use terminux_char_props::emoji::Presentation;
+use terminux_char_props::emoji_variation::WCWIDTH_TABLE;
+use terminux_char_props::widechar_width::WcWidth;
+use terminux_dynamic::{FromDynamic, ToDynamic};
+pub use terminux_escape_parser::osc::Hyperlink;
 
 extern crate alloc;
 use crate::alloc::string::ToString;
@@ -190,7 +190,7 @@ impl Default for SemanticType {
     }
 }
 
-pub use wezterm_escape_parser::csi::{Blink, Intensity, Underline, VerticalAlign};
+pub use terminux_escape_parser::csi::{Blink, Intensity, Underline, VerticalAlign};
 
 impl Default for CellAttributes {
     fn default() -> Self {
@@ -884,7 +884,7 @@ pub const LATEST_UNICODE_VERSION: UnicodeVersion = UnicodeVersion {
 
 /// Returns true if the char `c` has the unicode White_Space property
 pub fn is_white_space_char(c: char) -> bool {
-    wezterm_char_props::white_space::WHITE_SPACE.contains_u32(c as u32)
+    terminux_char_props::white_space::WHITE_SPACE.contains_u32(c as u32)
 }
 
 /// Returns true if the grapheme string `g` consists entirely of characters

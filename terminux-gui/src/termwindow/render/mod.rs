@@ -27,11 +27,11 @@ use std::time::Instant;
 use termwiz::cellcluster::CellCluster;
 use termwiz::hyperlink::Hyperlink;
 use termwiz::surface::{CursorShape, CursorVisibility, SequenceNo};
-use wezterm_font::shaper::PresentationWidth;
-use wezterm_font::units::{IntPixelLength, PixelLength};
-use wezterm_font::{ClearShapeCache, GlyphInfo, LoadedFont};
-use wezterm_term::color::{ColorAttribute, ColorPalette};
-use wezterm_term::{CellAttributes, Line, StableRowIndex};
+use terminux_font::shaper::PresentationWidth;
+use terminux_font::units::{IntPixelLength, PixelLength};
+use terminux_font::{ClearShapeCache, GlyphInfo, LoadedFont};
+use terminux_term::color::{ColorAttribute, ColorPalette};
+use terminux_term::{CellAttributes, Line, StableRowIndex};
 use window::color::LinearRgba;
 
 pub mod borders;
@@ -911,26 +911,26 @@ fn resolve_fg_color_attr(
     style: &config::TextStyle,
 ) -> LinearRgba {
     match fg {
-        wezterm_term::color::ColorAttribute::Default => {
+        terminux_term::color::ColorAttribute::Default => {
             if let Some(fg) = style.foreground {
                 fg.into()
             } else {
                 palette.resolve_fg(attrs.foreground())
             }
         }
-        wezterm_term::color::ColorAttribute::PaletteIndex(idx)
+        terminux_term::color::ColorAttribute::PaletteIndex(idx)
             if idx < 8 && config.bold_brightens_ansi_colors != BoldBrightening::No =>
         {
             // For compatibility purposes, switch to a brighter version
             // of one of the standard ANSI colors when Bold is enabled.
             // This lifts black to dark grey.
-            let idx = if attrs.intensity() == wezterm_term::Intensity::Bold {
+            let idx = if attrs.intensity() == terminux_term::Intensity::Bold {
                 idx + 8
             } else {
                 idx
             };
 
-            palette.resolve_fg(wezterm_term::color::ColorAttribute::PaletteIndex(idx))
+            palette.resolve_fg(terminux_term::color::ColorAttribute::PaletteIndex(idx))
         }
         _ => palette.resolve_fg(fg),
     }

@@ -22,7 +22,7 @@ use termwiz::color::AnsiColor;
 use termwiz::image::{ImageCell, ImageData};
 use termwiz::surface::{SequenceNo, SEQ_ZERO};
 use url::Url;
-use wezterm_term::{KeyCode, KeyModifiers, Line, StableRowIndex};
+use terminux_term::{KeyCode, KeyModifiers, Line, StableRowIndex};
 
 const MAX_POLL_INTERVAL: Duration = Duration::from_secs(30);
 const BASE_POLL_INTERVAL: Duration = Duration::from_millis(20);
@@ -771,7 +771,7 @@ impl RenderableState {
                     let col = inner
                         .dimensions
                         .cols
-                        .saturating_sub(wezterm_term::unicode_column_width(&status, None));
+                        .saturating_sub(terminux_term::unicode_column_width(&status, None));
 
                     let mut attr = CellAttributes::default();
                     attr.set_foreground(AnsiColor::White);

@@ -42,10 +42,10 @@ serde = {workspace=true, features = ["rc", "derive"]}
 tiny-skia.workspace = true
 glium.workspace = true
 url.workspace = true
-wezterm-bidi.workspace = true
-wezterm-color-types.workspace = true
-wezterm-font.workspace = true
-wezterm-input-types.workspace = true
+terminux-bidi.workspace = true
+terminux-color-types.workspace = true
+terminux-font.workspace = true
+terminux-input-types.workspace = true
 
 [target."cfg(windows)".dependencies]
 clipboard-win.workspace = true

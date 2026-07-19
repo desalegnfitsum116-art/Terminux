@@ -5,11 +5,11 @@ use core::cmp::min;
 use finl_unicode::grapheme_clusters::Graphemes;
 #[cfg(feature = "use_serde")]
 use serde::{Deserialize, Serialize};
-use wezterm_cell::color::ColorAttribute;
+use terminux_cell::color::ColorAttribute;
 #[cfg(feature = "use_image")]
-use wezterm_cell::image::ImageCell;
-use wezterm_cell::{Cell, CellAttributes};
-use wezterm_dynamic::{FromDynamic, ToDynamic};
+use terminux_cell::image::ImageCell;
+use terminux_cell::{Cell, CellAttributes};
+use terminux_dynamic::{FromDynamic, ToDynamic};
 
 extern crate alloc;
 use crate::alloc::borrow::ToOwned;
@@ -918,9 +918,9 @@ fn compute_position_change(current: usize, pos: &Position, limit: usize) -> usiz
 mod test {
     use super::*;
     use alloc::sync::Arc;
-    use wezterm_cell::color::AnsiColor;
-    use wezterm_cell::image::ImageData;
-    use wezterm_cell::{AttributeChange, Intensity};
+    use terminux_cell::color::AnsiColor;
+    use terminux_cell::image::ImageData;
+    use terminux_cell::{AttributeChange, Intensity};
 
     // The \x20's look a little awkward, but we can't use a plain
     // space in the first chararcter of a multi-line continuation;
@@ -1190,7 +1190,7 @@ mod test {
 
     #[test]
     fn attribute_setting() {
-        use wezterm_cell::Intensity;
+        use terminux_cell::Intensity;
 
         let mut s = Surface::new(3, 1);
         s.add_change("n");

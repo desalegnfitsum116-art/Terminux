@@ -1,6 +1,6 @@
 use crate::config::validate_domain_name;
 use crate::*;
-use wezterm_dynamic::{FromDynamic, ToDynamic};
+use terminux_dynamic::{FromDynamic, ToDynamic};
 
 #[derive(Default, Debug, Clone, FromDynamic, ToDynamic)]
 pub struct TlsDomainServer {

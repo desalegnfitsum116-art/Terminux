@@ -2,7 +2,7 @@ use crate::sshd::*;
 use portable_pty::{MasterPty, PtySize};
 use rstest::*;
 use std::io::Read;
-use wezterm_ssh::Config;
+use terminux_ssh::Config;
 
 #[fixture]
 async fn session_with_agent_forward(

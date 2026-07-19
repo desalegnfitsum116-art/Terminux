@@ -16,7 +16,7 @@ use termwiz::escape::parser::Parser as TWParser;
 use termwiz::escape::Action;
 #[cfg(unix)]
 use unix::UnixTty as Tty;
-use wezterm_term::color::ColorPalette;
+use terminux_term::color::ColorPalette;
 #[cfg(windows)]
 use win::WinTty as Tty;
 
@@ -63,12 +63,12 @@ impl Header {
         let mut env = HashMap::new();
         env.insert("TERM".to_string(), config.term.to_string());
         env.insert(
-            "WEZTERM_VERSION".to_string(),
-            config::wezterm_version().to_string(),
+            "TERMINUX_VERSION".to_string(),
+            config::terminux_version().to_string(),
         );
         env.insert(
-            "WEZTERM_TARGET_TRIPLE".to_string(),
-            config::wezterm_target_triple().to_string(),
+            "TERMINUX_TARGET_TRIPLE".to_string(),
+            config::terminux_target_triple().to_string(),
         );
         if let Ok(shell) = std::env::var("SHELL") {
             env.insert("SHELL".to_string(), shell);

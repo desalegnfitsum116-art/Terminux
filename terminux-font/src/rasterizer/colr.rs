@@ -1,5 +1,5 @@
 use cairo::{Context, Extend, LinearGradient, Matrix, Mesh, MeshCorner, Operator, RadialGradient};
-use wezterm_color_types::{SrgbaPixel, SrgbaTuple};
+use terminux_color_types::{SrgbaPixel, SrgbaTuple};
 
 /* The gradient related routines in this file were ported from HarfBuzz, which
  * were in turn ported from BlackRenderer by Black Foundry.

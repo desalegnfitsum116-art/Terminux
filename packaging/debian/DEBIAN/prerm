@@ -1,0 +1,11 @@
+#!/bin/sh
+set -e
+
+# Terminux pre-removal script
+
+# Remove x-terminal-emulator alternative if it points to terminux
+if command -v update-alternatives >/dev/null 2>&1; then
+    update-alternatives --remove x-terminal-emulator /usr/bin/terminux || true
+fi
+
+exit 0

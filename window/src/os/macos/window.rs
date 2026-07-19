@@ -50,8 +50,8 @@ use std::ptr::NonNull;
 use std::rc::Rc;
 use std::str::FromStr;
 use std::time::Instant;
-use wezterm_font::FontConfiguration;
-use wezterm_input_types::{is_ascii_control, IntegratedTitleButtonStyle, KeyboardLedStatus};
+use terminux_font::FontConfiguration;
+use terminux_input_types::{is_ascii_control, IntegratedTitleButtonStyle, KeyboardLedStatus};
 
 #[allow(non_upper_case_globals)]
 const NSViewLayerContentsPlacementTopLeft: NSInteger = 11;
@@ -1818,8 +1818,8 @@ impl Inner {
     }
 }
 
-const VIEW_CLS_NAME: &str = "WezTermWindowView";
-const WINDOW_CLS_NAME: &str = "WezTermWindow";
+const VIEW_CLS_NAME: &str = "TerminuxWindowView";
+const WINDOW_CLS_NAME: &str = "TerminuxWindow";
 const TITLEBAR_VIEW_NAME: &str = "NSTitlebarContainerView";
 
 struct WindowView {
@@ -2276,7 +2276,7 @@ impl WindowView {
         NO
     }
 
-    extern "C" fn wezterm_perform_key_assignment(
+    extern "C" fn terminux_perform_key_assignment(
         this: &mut Object,
         _sel: Sel,
         menu_item: *mut Object,
@@ -2284,7 +2284,7 @@ impl WindowView {
         let menu_item = MenuItem::with_menu_item(menu_item);
         // Safe because weztermPerformKeyAssignment: is only used with KeyAssignment
         let action = menu_item.get_represented_item();
-        log::debug!("wezterm_perform_key_assignment {action:?}",);
+        log::debug!("terminux_perform_key_assignment {action:?}",);
         match action {
             Some(RepresentedItem::KeyAssignment(action)) => {
                 if let Some(this) = Self::get_this(this) {
@@ -3194,7 +3194,7 @@ impl WindowView {
 
             cls.add_method(
                 sel!(weztermPerformKeyAssignment:),
-                Self::wezterm_perform_key_assignment
+                Self::terminux_perform_key_assignment
                     as extern "C" fn(&mut Object, Sel, *mut Object),
             );
 

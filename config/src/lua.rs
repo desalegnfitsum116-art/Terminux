@@ -12,13 +12,13 @@ use portable_pty::CommandBuilder;
 use std::convert::TryFrom;
 use std::path::Path;
 use std::sync::Mutex;
-use wezterm_dynamic::{
+use terminux_dynamic::{
     FromDynamic, FromDynamicOptions, ToDynamic, UnknownFieldAction, Value as DynValue,
 };
 
 pub use mlua;
 
-static LUA_REGISTRY_USER_CALLBACK_COUNT: &str = "wezterm-user-callback-count";
+static LUA_REGISTRY_USER_CALLBACK_COUNT: &str = "terminux-user-callback-count";
 
 pub type SetupFunc = fn(&Lua) -> anyhow::Result<()>;
 
@@ -56,17 +56,17 @@ pub fn get_or_create_sub_module<'lua>(
     lua: &'lua Lua,
     name: &str,
 ) -> anyhow::Result<mlua::Table<'lua>> {
-    let wezterm_mod = get_or_create_module(lua, "wezterm")?;
-    let sub = wezterm_mod.get(name)?;
+    let terminux_mod = get_or_create_module(lua, "terminux")?;
+    let sub = terminux_mod.get(name)?;
     match sub {
         Value::Nil => {
             let sub = lua.create_table()?;
-            wezterm_mod.set(name, sub.clone())?;
+            terminux_mod.set(name, sub.clone())?;
             Ok(sub)
         }
         Value::Table(sub) => Ok(sub),
         wat => anyhow::bail!(
-            "cannot register module wezterm.{name} as it is already set to a value of type {}",
+            "cannot register module terminux.{name} as it is already set to a value of type {}",
             wat.type_name()
         ),
     }
@@ -169,7 +169,7 @@ fn config_builder_new_index<'lua>(
                             break;
                         }
                     }
-                    wezterm_dynamic::Error::warn(message);
+                    terminux_dynamic::Error::warn(message);
                 }
                 Some(_dvalue) => {
                     myself.raw_set(key, value)?;
@@ -189,16 +189,16 @@ fn config_builder_new_index<'lua>(
 /// the environment.
 ///
 /// The `package.path` is configured to search the user's
-/// wezterm specific config paths for lua modules, should
+/// terminux specific config paths for lua modules, should
 /// they choose to `require` additional code from their config.
 ///
-/// A `wezterm` module is registered so that the script can
-/// `require "wezterm"` and call into functions provided by
-/// wezterm.  The wezterm module contains:
-/// * `executable_dir` - the directory containing the wezterm
+/// A `terminux` module is registered so that the script can
+/// `require "terminux"` and call into functions provided by
+/// terminux.  The terminux module contains:
+/// * `executable_dir` - the directory containing the terminux
 ///   executable.  This is potentially useful for portable
 ///   installs on Windows.
-/// * `config_dir` - the directory containing the wezterm
+/// * `config_dir` - the directory containing the terminux
 ///   configuration.
 /// * `log_error` - a function that logs to stderr (or the server
 ///   log file for daemonized wezterm).
@@ -216,7 +216,7 @@ pub fn make_lua_context(config_file: &Path) -> anyhow::Result<Lua> {
     {
         let globals = lua.globals();
         // This table will be the `wezterm` module in the script
-        let wezterm_mod = get_or_create_module(&lua, "wezterm")?;
+        let terminux_mod = get_or_create_module(&lua, "terminux")?;
 
         let package: Table = globals.get("package").context("get _G.package")?;
         let package_path: String = package.get("path").context("get package.path as String")?;
@@ -227,7 +227,7 @@ pub fn make_lua_context(config_file: &Path) -> anyhow::Result<Lua> {
             array.insert(1, format!("{}/?/init.lua", path.display()));
         }
 
-        prefix_path(&mut path_array, &crate::HOME_DIR.join(".wezterm"));
+        prefix_path(&mut path_array, &crate::HOME_DIR.join(".terminux"));
         for dir in crate::CONFIG_DIRS.iter() {
             prefix_path(&mut path_array, dir);
         }
@@ -238,17 +238,17 @@ pub fn make_lua_context(config_file: &Path) -> anyhow::Result<Lua> {
 
         if let Ok(exe) = std::env::current_exe() {
             if let Some(path) = exe.parent() {
-                wezterm_mod
+                terminux_mod
                     .set(
                         "executable_dir",
                         path.to_str()
                             .ok_or_else(|| anyhow!("current_exe path is not UTF-8"))?,
                     )
-                    .context("set wezterm.executable_dir")?;
+                    .context("set terminux.executable_dir")?;
                 if cfg!(windows) {
                     // For a portable windows install, force in this path ahead
                     // of the rest
-                    prefix_path(&mut path_array, &path.join("wezterm_modules"));
+                    prefix_path(&mut path_array, &path.join("terminux_modules"));
                 }
             }
         }
@@ -269,7 +269,7 @@ local orig = package.searchers[2]
 package.searchers[2] = function(module)
   local name, err = package.searchpath(module, package.path)
   if name then
-    package.loaded.wezterm.add_to_config_reload_watch_list(name)
+    package.loaded.terminux.add_to_config_reload_watch_list(name)
   end
   return orig(module)
 end
@@ -279,7 +279,7 @@ end
         .eval::<()>()
         .context("replace package.searchers")?;
 
-        wezterm_mod.set(
+        terminux_mod.set(
             "config_builder",
             lua.create_function(|lua, _: ()| {
                 let config = lua.create_table()?;
@@ -298,52 +298,53 @@ end
             })?,
         )?;
 
-        wezterm_mod.set(
+        terminux_mod.set(
             "reload_configuration",
             lua.create_function(|_, _: ()| {
                 crate::reload();
                 Ok(())
             })?,
         )?;
-        wezterm_mod
+        terminux_mod
             .set("config_file", config_file_str)
-            .context("set wezterm.config_file")?;
-        wezterm_mod
+            .context("set terminux.config_file")?;
+        terminux_mod
             .set(
                 "config_dir",
                 config_dir
                     .to_str()
                     .ok_or_else(|| anyhow!("config dir path is not UTF-8"))?,
             )
-            .context("set wezterm.config_dir")?;
+            .context("set terminux.config_dir")?;
 
-        lua.set_named_registry_value("wezterm-watch-paths", Vec::<String>::new())?;
-        wezterm_mod.set(
+        lua.set_named_registry_value("terminux-watch-paths", Vec::<String>::new())?;
+        terminux_mod.set(
             "add_to_config_reload_watch_list",
             lua.create_function(add_to_config_reload_watch_list)?,
         )?;
 
-        wezterm_mod.set("target_triple", crate::wezterm_target_triple())?;
-        wezterm_mod.set("version", crate::wezterm_version())?;
-        wezterm_mod.set("home_dir", crate::HOME_DIR.to_str())?;
-        wezterm_mod.set(
+        terminux_mod.set("target_triple", crate::terminux_target_triple())?;
+        terminux_mod.set("version", crate::terminux_version())?;
+        terminux_mod.set("home_dir", crate::HOME_DIR.to_str())?;
+        terminux_mod.set("data_dir", crate::DATA_DIR.to_str())?;
+        terminux_mod.set(
             "running_under_wsl",
             lua.create_function(|_, ()| Ok(crate::running_under_wsl()))?,
         )?;
 
-        wezterm_mod.set(
+        terminux_mod.set(
             "default_wsl_domains",
             lua.create_function(|_, ()| Ok(crate::WslDomain::default_domains()))?,
         )?;
 
-        wezterm_mod.set("font", lua.create_function(font)?)?;
-        wezterm_mod.set(
+        terminux_mod.set("font", lua.create_function(font)?)?;
+        terminux_mod.set(
             "font_with_fallback",
             lua.create_function(font_with_fallback)?,
         )?;
-        wezterm_mod.set("hostname", lua.create_function(hostname)?)?;
-        wezterm_mod.set("action", luahelper::enumctor::Enum::<KeyAssignment>::new())?;
-        wezterm_mod.set(
+        terminux_mod.set("hostname", lua.create_function(hostname)?)?;
+        terminux_mod.set("action", luahelper::enumctor::Enum::<KeyAssignment>::new())?;
+        terminux_mod.set(
             "has_action",
             lua.create_function(|_lua, name: String| {
                 Ok(KeyAssignment::variants().contains(&name.as_str()))
@@ -351,18 +352,18 @@ end
         )?;
 
         lua.set_named_registry_value(LUA_REGISTRY_USER_CALLBACK_COUNT, 0)?;
-        wezterm_mod.set("action_callback", lua.create_function(action_callback)?)?;
-        wezterm_mod.set("exec_domain", lua.create_function(exec_domain)?)?;
+        terminux_mod.set("action_callback", lua.create_function(action_callback)?)?;
+        terminux_mod.set("exec_domain", lua.create_function(exec_domain)?)?;
 
-        wezterm_mod.set("utf16_to_utf8", lua.create_function(utf16_to_utf8)?)?;
-        wezterm_mod.set("split_by_newlines", lua.create_function(split_by_newlines)?)?;
-        wezterm_mod.set("on", lua.create_function(register_event)?)?;
-        wezterm_mod.set("emit", lua.create_async_function(emit_event)?)?;
-        wezterm_mod.set("shell_join_args", lua.create_function(shell_join_args)?)?;
-        wezterm_mod.set("shell_quote_arg", lua.create_function(shell_quote_arg)?)?;
-        wezterm_mod.set("shell_split", lua.create_function(shell_split)?)?;
+        terminux_mod.set("utf16_to_utf8", lua.create_function(utf16_to_utf8)?)?;
+        terminux_mod.set("split_by_newlines", lua.create_function(split_by_newlines)?)?;
+        terminux_mod.set("on", lua.create_function(register_event)?)?;
+        terminux_mod.set("emit", lua.create_async_function(emit_event)?)?;
+        terminux_mod.set("shell_join_args", lua.create_function(shell_join_args)?)?;
+        terminux_mod.set("shell_quote_arg", lua.create_function(shell_quote_arg)?)?;
+        terminux_mod.set("shell_split", lua.create_function(shell_split)?)?;
 
-        wezterm_mod.set(
+        terminux_mod.set(
             "default_hyperlink_rules",
             lua.create_function(move |lua, ()| {
                 let rules = crate::config::default_hyperlink_rules();
@@ -712,18 +713,18 @@ fn split_by_newlines<'lua>(_: &'lua Lua, text: String) -> mlua::Result<Vec<Strin
 /// `wezterm.emit` call.
 ///
 /// ```lua
-/// wezterm.on("event-name", function(arg1, arg2)
+/// terminux.on("event-name", function(arg1, arg2)
 ///   -- do something
 ///   return false -- if you want to prevent other handlers running
 /// end);
 ///
-/// wezterm.emit("event-name", "foo", "bar");
+/// terminux.emit("event-name", "foo", "bar");
 /// ```
 pub fn register_event<'lua>(
     lua: &'lua Lua,
     (name, func): (String, mlua::Function),
 ) -> mlua::Result<()> {
-    let decorated_name = format!("wezterm-event-{}", name);
+    let decorated_name = format!("terminux-event-{}", name);
     let tbl: mlua::Value = lua.named_registry_value(&decorated_name)?;
     match tbl {
         mlua::Value::Nil => {
@@ -744,7 +745,7 @@ pub fn register_event<'lua>(
     }
 }
 
-const IS_EVENT: &str = "wezterm-is-event-emission";
+const IS_EVENT: &str = "terminux-is-event-emission";
 
 /// Returns true if the current lua context is being called as part
 /// of an emit_event call.
@@ -754,7 +755,7 @@ pub fn is_event_emission<'lua>(lua: &'lua Lua) -> mlua::Result<bool> {
 
 /// This implements `wezterm.emit`.
 /// The first parameter to emit is the name of a signal that may or may not
-/// have previously been registered via `wezterm.on`.
+/// have previously been registered via `terminux.on`.
 /// `wezterm.emit` will call each of the registered handlers in the order
 /// that they were registered and pass the remainder of the `emit` arguments
 /// to those handler functions.
@@ -770,7 +771,7 @@ pub async fn emit_event<'lua>(
 ) -> mlua::Result<bool> {
     lua.set_named_registry_value(IS_EVENT, true)?;
 
-    let decorated_name = format!("wezterm-event-{}", name);
+    let decorated_name = format!("terminux-event-{}", name);
     let tbl: mlua::Value = lua.named_registry_value(&decorated_name)?;
     match tbl {
         mlua::Value::Table(tbl) => {
@@ -799,7 +800,7 @@ pub fn emit_sync_callback<'lua, A>(
 where
     A: IntoLuaMulti<'lua>,
 {
-    let decorated_name = format!("wezterm-event-{}", name);
+    let decorated_name = format!("terminux-event-{}", name);
     let tbl: mlua::Value = lua.named_registry_value(&decorated_name)?;
     match tbl {
         mlua::Value::Table(tbl) => {
@@ -820,7 +821,7 @@ pub async fn emit_async_callback<'lua, A>(
 where
     A: IntoLuaMulti<'lua>,
 {
-    let decorated_name = format!("wezterm-event-{}", name);
+    let decorated_name = format!("terminux-event-{}", name);
     let tbl: mlua::Value = lua.named_registry_value(&decorated_name)?;
     match tbl {
         mlua::Value::Table(tbl) => {
@@ -856,9 +857,9 @@ pub fn add_to_config_reload_watch_list<'lua>(
     lua: &'lua Lua,
     args: Variadic<String>,
 ) -> mlua::Result<()> {
-    let mut watch_paths: Vec<String> = lua.named_registry_value("wezterm-watch-paths")?;
+    let mut watch_paths: Vec<String> = lua.named_registry_value("terminux-watch-paths")?;
     watch_paths.extend_from_slice(&args);
-    lua.set_named_registry_value("wezterm-watch-paths", watch_paths)?;
+    lua.set_named_registry_value("terminux-watch-paths", watch_paths)?;
     Ok(())
 }
 
@@ -923,25 +924,25 @@ mod test {
         smol::block_on(
             lua.load(
                 r#"
-local wezterm = require 'wezterm';
+local terminux = require "terminux"
 
-wezterm.on('foo', function (n)
+terminux.on('foo', function (n)
     print("lua hook recording " .. n);
 end);
 
 -- one of the foo handlers returns false, so the emit
 -- returns false overall, indicating that the default
 -- action should not be taken
-assert(wezterm.emit('foo', 2) == false)
+assert(terminux.emit('foo', 2) == false)
 
-wezterm.on('bar', function (n, str)
+terminux.on('bar', function (n, str)
     print("bar says " .. n .. " " .. str)
 end);
 
 -- None of the bar handlers return anything, so the
 -- emit returns true to indicate that the default
 -- action should be performed
-assert(wezterm.emit('bar', 42, 'woot') == true)
+assert(terminux.emit('bar', 42, 'woot') == true)
 "#,
             )
             .exec_async(),

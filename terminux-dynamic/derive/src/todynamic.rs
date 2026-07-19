@@ -38,14 +38,14 @@ fn derive_struct(input: &DeriveInput, fields: &FieldsNamed) -> Result<TokenStrea
         .map(|f| f.to_dynamic())
         .collect::<Vec<_>>();
 
-    let bound = parse_quote!(wezterm_dynamic::PlaceDynamic);
+    let bound = parse_quote!(terminux_dynamic::PlaceDynamic);
     let bounded_where_clause = bound::where_clause_with_bound(&input.generics, bound);
 
     let tokens = match info.into {
         Some(into) => {
             quote!(
-            impl #impl_generics wezterm_dynamic::ToDynamic for #ident #ty_generics #bounded_where_clause {
-                fn to_dynamic(&self) -> wezterm_dynamic::Value {
+            impl #impl_generics terminux_dynamic::ToDynamic for #ident #ty_generics #bounded_where_clause {
+                fn to_dynamic(&self) -> terminux_dynamic::Value {
                     let target: #into = self.into();
                     target.to_dynamic()
                 }
@@ -54,21 +54,21 @@ fn derive_struct(input: &DeriveInput, fields: &FieldsNamed) -> Result<TokenStrea
         }
         None => {
             quote!(
-            impl #impl_generics wezterm_dynamic::PlaceDynamic for #ident #ty_generics #bounded_where_clause {
-                fn place_dynamic(&self, place: &mut wezterm_dynamic::Object) {
+            impl #impl_generics terminux_dynamic::PlaceDynamic for #ident #ty_generics #bounded_where_clause {
+                fn place_dynamic(&self, place: &mut terminux_dynamic::Object) {
                     #(
                         #placements
                     )*
                 }
             }
 
-            impl #impl_generics wezterm_dynamic::ToDynamic for #ident #ty_generics #bounded_where_clause {
-                fn to_dynamic(&self) -> wezterm_dynamic::Value {
-                use wezterm_dynamic::PlaceDynamic;
+            impl #impl_generics terminux_dynamic::ToDynamic for #ident #ty_generics #bounded_where_clause {
+                fn to_dynamic(&self) -> terminux_dynamic::Value {
+                use terminux_dynamic::PlaceDynamic;
 
-                let mut object = wezterm_dynamic::Object::default();
+                let mut object = terminux_dynamic::Object::default();
                 self.place_dynamic(&mut object);
-                wezterm_dynamic::Value::Object(object)
+                terminux_dynamic::Value::Object(object)
                 }
             }
             )
@@ -95,8 +95,8 @@ fn derive_enum(input: &DeriveInput, enumeration: &DataEnum) -> Result<TokenStrea
     let tokens = match info.into {
         Some(into) => {
             quote! {
-                impl wezterm_dynamic::ToDynamic for #ident {
-                    fn to_dynamic(&self) -> wezterm_dynamic::Value {
+                impl terminux_dynamic::ToDynamic for #ident {
+                    fn to_dynamic(&self) -> terminux_dynamic::Value {
                         let target : #into = self.into();
                         target.to_dynamic()
                     }
@@ -133,11 +133,11 @@ fn derive_enum(input: &DeriveInput, enumeration: &DataEnum) -> Result<TokenStrea
 
                         Ok(quote!(
                             Self::#ident { #( #var_fields, )* } => {
-                                let mut place = wezterm_dynamic::Object::default();
+                                let mut place = terminux_dynamic::Object::default();
 
                                 #( #placements )*
 
-                                let mut obj = wezterm_dynamic::Object::default();
+                                let mut obj = terminux_dynamic::Object::default();
                                 obj.insert(#literal.to_dynamic(), Value::Object(place));
                                 Value::Object(obj)
                             }
@@ -156,7 +156,7 @@ fn derive_enum(input: &DeriveInput, enumeration: &DataEnum) -> Result<TokenStrea
                         if hint == 1 {
                             Ok(quote!(
                                 Self::#ident(f) => {
-                                    let mut obj = wezterm_dynamic::Object::default();
+                                    let mut obj = terminux_dynamic::Object::default();
                                     obj.insert(#literal.to_dynamic(), f.to_dynamic());
                                     Value::Object(obj)
                                 }
@@ -179,7 +179,7 @@ fn derive_enum(input: &DeriveInput, enumeration: &DataEnum) -> Result<TokenStrea
 
                                     #( #placements )*
 
-                                    let mut obj = wezterm_dynamic::Object::default();
+                                    let mut obj = terminux_dynamic::Object::default();
                                     obj.insert(#literal.to_dynamic(), Value::Array(place.into()));
                                     Value::Object(obj)
                                 }
@@ -191,9 +191,9 @@ fn derive_enum(input: &DeriveInput, enumeration: &DataEnum) -> Result<TokenStrea
             .collect::<Result<Vec<_>>>()?;
 
             quote! {
-                impl wezterm_dynamic::ToDynamic for #ident {
-                    fn to_dynamic(&self) -> wezterm_dynamic::Value {
-                        use wezterm_dynamic::Value;
+                impl terminux_dynamic::ToDynamic for #ident {
+                    fn to_dynamic(&self) -> terminux_dynamic::Value {
+                        use terminux_dynamic::Value;
                         match self {
                             #(
                                 #variants

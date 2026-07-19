@@ -21,8 +21,8 @@ use std::cmp::Ordering;
 use std::collections::HashMap;
 use std::path::PathBuf;
 use termwiz::nerdfonts::NERD_FONTS;
-use wezterm_dynamic::{FromDynamic, ToDynamic};
-use wezterm_term::{KeyCode, KeyModifiers, MouseEvent};
+use terminux_dynamic::{FromDynamic, ToDynamic};
+use terminux_term::{KeyCode, KeyModifiers, MouseEvent};
 use window::color::LinearRgba;
 use window::Modifiers;
 

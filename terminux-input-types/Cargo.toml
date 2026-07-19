@@ -1,5 +1,5 @@
 [package]
-name = "wezterm-input-types"
+name = "terminux-input-types"
 version = "0.1.0"
 authors = ["Wez Furlong <wez@wezfurlong.org>"]
 edition = "2021"
@@ -13,7 +13,7 @@ license = "MIT"
 bitflags.workspace = true
 euclid.workspace = true
 serde = {workspace=true, features = ["rc", "derive"], optional=true}
-wezterm-dynamic.workspace = true
+terminux-dynamic.workspace = true
 
 [features]
 default = ["serde", "std"]

@@ -1,5 +1,5 @@
 [package]
-name = "wezterm-mux-server"
+name = "terminux-mux-server"
 version = "0.1.0"
 authors = ["Wez Furlong <wez@wezfurlong.org>"]
 edition = "2018"
@@ -22,10 +22,10 @@ openssl.workspace = true
 portable-pty = { workspace=true, features = ["serde_support"]}
 promise.workspace = true
 umask.workspace = true
-wezterm-blob-leases = {workspace=true, features=["simple_tempdir"]}
-wezterm-mux-server-impl.workspace = true
-wezterm-gui-subcommands.workspace = true
-wezterm-term.workspace = true
+terminux-blob-leases = {workspace=true, features=["simple_tempdir"]}
+terminux-mux-server-impl.workspace = true
+terminux-gui-subcommands.workspace = true
+terminux-term.workspace = true
 
 [target."cfg(windows)".dependencies]
 winapi = { workspace=true, features = [ "winuser" ]}

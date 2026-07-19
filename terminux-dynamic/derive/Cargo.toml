@@ -1,5 +1,5 @@
 [package]
-name = "wezterm-dynamic-derive"
+name = "terminux-dynamic-derive"
 version = "0.1.1"
 edition = "2021"
 repository = "https://github.com/wezterm/wezterm"
