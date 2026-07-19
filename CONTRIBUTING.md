@@ -1,184 +1,240 @@
-# Contributing to wezterm
+# Contributing to Terminux
 
-Thanks for considering donating your time and energy!  I value any contribution,
-even if it is just to highlight a typo.
+Thank you for your interest in contributing to Terminux!
 
-Included here are some guidelines that can help streamline taking in your contribution.
-They are just guidelines and not hard-and-fast rules. Things will probably go faster
-and smoother if you have the time and energy to read and follow these suggestions.
+Terminux is a modern, customizable terminal built on top of WezTerm. Whether you're fixing bugs, improving documentation, creating themes, developing plugins, or implementing new features, your contributions are welcome.
 
-## Contributing Documentation
+## Code of Conduct
 
-There's never enough!  Pretty much anything is fair game to improve here.
+By participating in this project, you agree to:
 
-### Running the doc build yourself
+* Be respectful and constructive.
+* Welcome newcomers and help others learn.
+* Focus on improving the project.
+* Avoid harassment, discrimination, or personal attacks.
 
-To check your documentation additions, you can optionally build the docs yourself and see how the changes will look on the webpage. 
+## Ways to Contribute
 
-To serve them up, and then automatically rebuild and refresh the docs in your browser, run:
-```console
-$ ci/build-docs.sh serve
-```
-And then click on the URL that it prints out after it has performed the first build.
+### Report Bugs
 
-Any arguments passed to `build-docs.sh` are passed down to the underlying `mkdocs` utility.
+Before opening an issue:
 
-Look at [mkdocs serve](https://www.mkdocs.org/user-guide/cli/#mkdocs-serve) for more information on additional parameters.
+* Ensure you're using the latest version of Terminux.
+* Search existing issues to avoid duplicates.
+* Include reproduction steps.
+* Include system information and logs when possible.
 
-### Operating system specific installation instructions?
+### Suggest Features
 
-There are a lot of targets out there.  Today we have docs that are Ubuntu biased
-and I know that there are a lot of flavors of Linux. Rather than expand the README
-with instructions for those, please translate the instructions into steps that
-can be run in the [`get-deps`](https://github.com/wezterm/wezterm/blob/master/get-deps)
-script.
+Feature requests should include:
 
-## Contributing code
+* A clear description of the feature.
+* The problem it solves.
+* Alternative solutions considered.
+* Mockups or examples when applicable.
 
-Yes please!
+### Improve Documentation
 
-If you are new to the Rust language check out <https://doc.rust-lang.org/rust-by-example/>.
+Documentation contributions are highly valued.
 
-### Building from source
+Examples:
 
-To build wezterm from source, you will need a local Rust toolchain, and a few platform-specific dependencies.
-Follow the [Install from Source](https://wezfurlong.org/wezterm/install/source.html) guide to get started!
+* Fixing typos
+* Clarifying instructions
+* Creating tutorials
+* Expanding API documentation
+* Writing plugin development guides
 
-Some platforms like Windows have a few specific steps, make sure to check the dedicated sections in the guide.
+### Contribute Code
 
-### Where to find things?
+Areas where contributions are welcome:
 
-The `term` directory holds the core terminal model code. This is agnostic
-of any windowing system. If you want to add support for terminal escape
-sequences and that sort of thing, you probably want to be in the `term` directory.
-Keep in mind that for maximal compatibility and utility `wezterm` aims to
-be compatible with the `xterm` behavior.
-https://invisible-island.net/xterm/ctlseqs/ctlseqs.html is a useful resource!
+* Terminal features
+* Performance improvements
+* Theme development
+* Plugin API enhancements
+* Linux packaging
+* Accessibility improvements
+* UI and UX improvements
+* Bug fixes
 
-The `src` directory holds the code for the `wezterm` program. This is
-the GUI renderer for the terminal model.  If you want to change something
-about the GUI you want to be in the `src` dir.
+## Development Setup
 
-### Iterating
+### Clone the Repository
 
-I tend to iterate and sanity check as I develop using `cargo check`; it
-will type-check your code without generating code which is much faster
-than building everything in release mode:
-
-```console
-$ cargo check
+```bash
+git clone --recursive https://github.com/YOUR_USERNAME/terminux.git
+cd terminux
 ```
 
-Likewise, if you want to quickly check that something works, you can run it
-in debug mode using:
+### Install Rust
 
-```console
-$ cargo run
+```bash
+curl https://sh.rustup.rs -sSf | sh
 ```
 
-This will produce a debug-instrumented binary with poor optimization. This will
-give you more detail in the backtrace produced if you run `RUST_BACKTRACE=1 cargo run`.
+### Build Terminux
 
-If you get a panic and want to examine local variables, you'll need to use gdb:
-
-```console
-$ cargo build
-$ gdb ./target/debug/wezterm
-$ break rust_panic               # hit tab to complete the name of the panic symbol!
-$ run
-$ bt
+```bash
+cargo build
 ```
 
-Starting WezTerm with `wezterm-gui start --always-new-process` is useful to ensure Mux logs are not
-hidden in an background process started in an earlier test.
+### Run Terminux
 
-Start WezTerm with `wezterm-gui --config-file ./test-conf.lua ……` to test a custom config file.
-
-
-### Please include tests to cover your changes!
-
-This will help ensure that your contributions keep working as things change.
-
-You can run the existing tests using:
-
-```console
-$ cargo test --all
+```bash
+cargo run
 ```
 
-There are some helper classes for writing tests for terminal behavior.
-Here's [an example of a test to verify that the terminal contents
-match expectations](https://github.com/wezterm/wezterm/blob/fd532a8c2fb3b56593597cf8be1775da1feda0a3/term/src/test/mod.rs#L314).
+### Release Build
 
-Please also make a point of adding comments to your tests to help
-clarify the intent of the test!
-
-### Testing in a NixOS VM
-
-If you need to test WezTerm in a clean desktop environment (e.g. to reproduce a
-display server bug or verify a desktop integration), you can use the provided
-NixOS VM configurations.
-
-Two desktop variants are available:
-- GNOME (`testing-on-gnome`)
-- KDE Plasma (`testing-on-plasma`).
-
-**Prerequisites:** Nix is installed, with flakes enabled (`experimental-features = nix-command flakes`).
-
-**Workflow:**
-
-```console
-$ cargo build                                            # build wezterm locally
-$ nixos-rebuild build-vm --flake ./nix#testing-on-plasma # build the Plasma VM image
-$ REPO=$PWD ./result/bin/run-nixos-vm                    # start the VM
+```bash
+cargo build --release
 ```
 
-> [!NOTE]
-> You might need to tweak desktop settings (e.g. the keyboard layout) on first VM start.
->
-> The VM state is stored in `nixos.qcow2` in the current working directory on the host.
+## Branch Naming
 
-Inside the VM, open a terminal (e.g. _Console_ on GNOME, _Konsole_ on Plasma), then:
+Use descriptive branch names:
 
-```console
-$ cd repo                      # go into ~/repo
-$ ./target/debug/wezterm-gui   # run wezterm for your tests
+```text
+feature/theme-manager
+feature/plugin-api
+fix/session-restore
+fix/crash-on-startup
+docs/readme-update
 ```
 
-The host repository is mounted into the VM at `/home/dev/repo` via a 9p shared directory,
-so changes on the host (rebuilds, test config file, ..) are immediately visible inside the VM.
+## Commit Message Guidelines
 
-Keep the VM running and make your changes locally, re-build wezterm on your host and kill/start
-wezterm again in the VM for your tests.
+Use clear commit messages.
 
-> [!WARNING]
-> The host repo is supposed to be mounted in read-write but I (@bew) don't know why changes in the
-> repo are not actually propagated to the host. (PR welcome!)
+Examples:
 
-### Please also include documentation if you are adding or changing behavior
-
-This helps to keep things well-understood and working in the long term.
-Don't worry if you're not a wordsmith or English isn't your first language as
-I can help with that. It is more important to capture the intent of the
-feature and having this written out in English also helps when it comes
-to reviewing the code.
-
-## Submitting a Pull Request
-
-After considering all of the above, and once you've prepared your contribution
-and are ready to submit it, you'll need to create a pull request.
-
-If you're new to GitHub Pull Requests, read through
-https://help.github.com/articles/creating-a-pull-request/ to understand
-how the process works.
-
-### Before you submit your code
-
-Make sure that the tests are working and that the code is correctly
-formatted otherwise the continuous integration system will fail your build:
-
-```console
-$ rustup component add rustfmt-preview          # you only need to do this once
-$ cargo test --all
-$ cargo fmt --all
+```text
+feat: add workspace session restore
+feat: implement plugin loader
+fix: resolve startup crash on Wayland
+fix: improve font fallback handling
+docs: update installation instructions
 ```
 
+Recommended prefixes:
+
+* feat
+* fix
+* docs
+* refactor
+* perf
+* test
+* build
+* ci
+
+## Pull Request Guidelines
+
+Before opening a pull request:
+
+* Ensure the project builds successfully.
+* Run all tests.
+* Update documentation if needed.
+* Keep changes focused and relevant.
+* Follow existing code style.
+
+A good pull request should include:
+
+* Summary of changes
+* Reason for the change
+* Screenshots (if UI changes are involved)
+* Related issue references
+
+## Coding Standards
+
+### Rust
+
+* Prefer idiomatic Rust.
+* Avoid unnecessary allocations.
+* Use descriptive names.
+* Keep functions focused and maintainable.
+* Add comments only when they improve understanding.
+
+### Lua
+
+* Keep plugin APIs stable.
+* Document public functions.
+* Maintain backward compatibility whenever possible.
+
+## Themes
+
+Theme contributions should:
+
+* Include screenshots.
+* Support ANSI color standards.
+* Maintain readable contrast.
+* Include a preview image.
+
+Suggested structure:
+
+```text
+themes/
+└── my-theme.lua
+```
+
+## Plugins
+
+Plugins should:
+
+* Be documented.
+* Avoid unnecessary dependencies.
+* Handle errors gracefully.
+* Respect user privacy.
+
+Suggested structure:
+
+```text
+plugin/
+├── manifest.json
+├── plugin.lua
+└── README.md
+```
+
+## Testing
+
+Before submitting code:
+
+```bash
+cargo test
+cargo clippy
+cargo fmt --check
+```
+
+Recommended:
+
+```bash
+cargo fmt
+cargo clippy
+```
+
+## Security
+
+If you discover a security vulnerability:
+
+Do not create a public issue.
+
+Instead, contact the maintainers privately and provide:
+
+* A detailed description
+* Reproduction steps
+* Potential impact
+* Suggested mitigation
+
+## Recognition
+
+All contributors are appreciated and will be recognized through:
+
+* GitHub contributor listings
+* Release notes
+* Community acknowledgements
+
+## License
+
+By contributing to Terminux, you agree that your contributions will be licensed under the same license as the project.
+
+Thank you for helping build Terminux.
