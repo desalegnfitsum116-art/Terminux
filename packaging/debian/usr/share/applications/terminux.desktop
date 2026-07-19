@@ -2,7 +2,7 @@
 Name=Terminux
 GenericName=Terminal Emulator
 Comment=GPU Accelerated Terminal Emulator — Fork of WezTerm
-Exec=terminux
+Exec=terminux start
 Icon=terminux
 Type=Application
 Terminal=false

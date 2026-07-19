@@ -44,11 +44,13 @@ fi
 echo "Build complete."
 echo ""
 
-# Step 2: Copy binary into packaging dir
+# Step 2: Copy binaries into packaging dir
 echo ">>> Preparing package files..."
 mkdir -p "$SCRIPT_DIR/usr/bin"
 cp "$BIN_DIR/terminux" "$SCRIPT_DIR/usr/bin/terminux"
+cp "$BIN_DIR/terminux-gui" "$SCRIPT_DIR/usr/bin/terminux-gui"
 strip "$SCRIPT_DIR/usr/bin/terminux"
+strip "$SCRIPT_DIR/usr/bin/terminux-gui"
 
 # Step 3: Update version and architecture in control file
 # Save originals for restore

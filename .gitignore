@@ -66,3 +66,6 @@ dhat-heap.json
 /__pycache__/
 /nix/result
 *.qcow2
+/dist/
+/packaging/debian/usr/bin/terminux
+/packaging/debian/usr/bin/terminux-gui
